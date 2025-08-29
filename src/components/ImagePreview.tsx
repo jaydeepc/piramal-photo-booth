@@ -197,17 +197,6 @@ const PrintImageWrapper = styled.div`
   }
 `;
 
-const PrintImageTitle = styled.p`
-  text-align: center;
-  color: #333;
-  font-weight: bold;
-  margin: 10px 0;
-  
-  @media screen {
-    display: none;
-  }
-`;
-
 const PrintImage = styled.img`
   max-width: 300px;
   max-height: 400px;
@@ -251,14 +240,44 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
     documentTitle: `Photo Booth - ${transformationType} Transformation`
   });
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (transformedImage) {
-      const link = document.createElement('a');
-      link.href = transformedImage;
-      link.download = `photo-booth-${transformationType}-${Date.now()}.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      try {
+        // Convert the image to a blob with proper MIME type
+        const response = await fetch(transformedImage);
+        const blob = await response.blob();
+        
+        // Create a new blob with explicit PNG MIME type
+        const pngBlob = new Blob([blob], { type: 'image/png' });
+        
+        // Create object URL for the blob
+        const blobUrl = URL.createObjectURL(pngBlob);
+        
+        // Create download link
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = `photo-booth-${transformationType.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.png`;
+        
+        // For mobile compatibility
+        link.setAttribute('target', '_blank');
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Clean up the object URL
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+      } catch (error) {
+        console.error('Download failed:', error);
+        // Fallback to original method
+        const link = document.createElement('a');
+        link.href = transformedImage;
+        link.download = `photo-booth-${transformationType.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.png`;
+        link.setAttribute('target', '_blank');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
   };
 
