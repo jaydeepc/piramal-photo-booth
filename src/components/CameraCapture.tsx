@@ -125,7 +125,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
   const [isCountdown, setIsCountdown] = useState(false);
   const [countdown, setCountdown] = useState(3);
   const [error, setError] = useState<string>('');
-  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
 
   const capture = useCallback(() => {
     setIsCountdown(true);

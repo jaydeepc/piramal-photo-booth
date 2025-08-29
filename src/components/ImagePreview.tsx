@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { Download, Printer, RotateCcw, Loader } from 'lucide-react';
+import { Download, Printer, RotateCcw, Loader, RefreshCw } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
 
 const PreviewContainer = styled.div`
@@ -222,6 +222,7 @@ interface ImagePreviewProps {
   transformationType: string;
   onRetake: () => void;
   onStartOver: () => void;
+  onRegenerate: () => void;
 }
 
 const ImagePreview: React.FC<ImagePreviewProps> = ({
@@ -231,7 +232,8 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
   error,
   transformationType,
   onRetake,
-  onStartOver
+  onStartOver,
+  onRegenerate
 }) => {
   const printRef = useRef<HTMLDivElement>(null);
 
@@ -327,6 +329,10 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
             <ActionButton onClick={handleDownload}>
               <Download size={20} />
               Download
+            </ActionButton>
+            <ActionButton onClick={onRegenerate} disabled={isLoading}>
+              <RefreshCw size={20} />
+              Regenerate
             </ActionButton>
           </>
         )}

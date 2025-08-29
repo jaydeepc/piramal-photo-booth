@@ -296,6 +296,44 @@ const App: React.FC = () => {
     });
   }, []);
 
+  const handleRegenerate = useCallback(async () => {
+    if (!state.selectedTransformation || !state.originalImageFile) return;
+
+    const transformation = TRANSFORMATION_OPTIONS.find(opt => opt.id === state.selectedTransformation);
+    if (!transformation) return;
+
+    setState(prev => ({
+      ...prev,
+      isProcessing: true,
+      error: null,
+      transformedImage: null
+    }));
+
+    try {
+      const transformedImages = await geminiService.transformImage(
+        state.originalImageFile,
+        transformation.prompt
+      );
+
+      if (transformedImages.length > 0) {
+        setState(prev => ({
+          ...prev,
+          transformedImage: transformedImages[0],
+          isProcessing: false
+        }));
+      } else {
+        throw new Error('No transformed image received');
+      }
+    } catch (error) {
+      console.error('Regeneration error:', error);
+      setState(prev => ({
+        ...prev,
+        isProcessing: false,
+        error: error instanceof Error ? error.message : 'Failed to regenerate image'
+      }));
+    }
+  }, [state.selectedTransformation, state.originalImageFile]);
+
   const getSelectedTransformationName = () => {
     if (!state.selectedTransformation) return '';
     const option = TRANSFORMATION_OPTIONS.find(opt => opt.id === state.selectedTransformation);
@@ -368,6 +406,7 @@ const App: React.FC = () => {
             transformationType={getSelectedTransformationName()}
             onRetake={handleRetake}
             onStartOver={handleStartOver}
+            onRegenerate={handleRegenerate}
           />
         ) : null;
       

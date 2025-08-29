@@ -65,28 +65,42 @@ export const TRANSFORMATION_OPTIONS = [
     name: 'Alien Fighter',
     description: 'Warrior battling extraterrestrial forces',
     category: 'action',
-    prompt: 'Transform this person into an alien fighter in combat pose with futuristic weapons, battle armor, alien creatures in background, alien planet landscape, energy blasts, 4K ultra-high resolution, photorealistic, dynamic action pose, sci-fi battle effects, epic scale, cinematic lighting'
+    prompt: 'CRITICAL: Preserve the person\'s exact facial features, skin tone, eye color, nose shape, and bone structure completely unchanged. Transform this person into an alien fighter in dynamic combat pose with futuristic weapons, battle armor, actively fighting alien creatures in background, alien planet landscape, energy blasts and explosions, 4K ultra-high resolution, photorealistic, intense action pose mid-battle, sci-fi battle effects, epic scale, cinematic lighting. Keep face 100% identical to original.'
   },
   {
     id: 'monster-hunter',
     name: 'Monster Hunter',
     description: 'Brave hunter facing mythical beasts',
     category: 'action',
-    prompt: 'Transform this person into a monster hunter with enchanted weapons, leather armor, facing giant monsters in background, dark forest setting, magical effects, 4K cinematic quality, photorealistic, heroic battle stance, fantasy creature effects, dramatic lighting, adventure movie style'
+    prompt: 'CRITICAL: Preserve the person\'s exact facial features, skin tone, eye color, nose shape, and bone structure completely unchanged. Transform this person into a monster hunter with enchanted weapons, leather armor, actively battling giant monsters in background, dark forest setting, magical effects, 4K cinematic quality, photorealistic, heroic battle stance mid-fight, fantasy creature effects, dramatic lighting, adventure movie style. Keep face 100% identical to original.'
   },
   {
     id: 'zombie-survivor',
     name: 'Zombie Survivor',
     description: 'Post-apocalyptic survivor',
     category: 'action',
-    prompt: 'Transform this person into a zombie apocalypse survivor with tactical gear, weapons, ruined city background, dramatic lighting, 4K ultra-high resolution, photorealistic, determined expression, post-apocalyptic atmosphere, survival movie cinematography, gritty effects'
+    prompt: 'CRITICAL: Preserve the person\'s exact facial features, skin tone, eye color, nose shape, and bone structure completely unchanged. Transform this person into a zombie apocalypse survivor with tactical gear, weapons, fighting zombies in ruined city background, dramatic lighting, 4K ultra-high resolution, photorealistic, determined expression in combat, post-apocalyptic atmosphere, survival movie cinematography, gritty effects. Keep face 100% identical to original.'
   },
   {
     id: 'ninja-warrior',
     name: 'Ninja Warrior',
     description: 'Stealthy martial arts master',
     category: 'action',
-    prompt: 'Transform this person into a ninja warrior with traditional black outfit, katana swords, rooftop background at night, moonlight, 4K cinematic quality, photorealistic, dynamic fighting pose, shadow effects, martial arts movie style, atmospheric fog'
+    prompt: 'CRITICAL: Preserve the person\'s exact facial features, skin tone, eye color, nose shape, and bone structure completely unchanged. Transform this person into a ninja warrior with traditional black outfit, katana swords, rooftop background at night, moonlight, 4K cinematic quality, photorealistic, dynamic fighting pose in mid-combat, shadow effects, martial arts movie style, atmospheric fog. Keep face 100% identical to original.'
+  },
+  {
+    id: 'villain-fighter',
+    name: 'Villain Fighter',
+    description: 'Hero battling evil villains',
+    category: 'action',
+    prompt: 'CRITICAL: Preserve the person\'s exact facial features, skin tone, eye color, nose shape, and bone structure completely unchanged. Transform this person into a hero fighting villains in dynamic combat pose, heroic costume, actively battling masked villains in urban setting, explosions and action effects, 4K ultra-high resolution, photorealistic, intense action scene mid-fight, superhero movie cinematography, dramatic lighting. Keep face 100% identical to original.'
+  },
+  {
+    id: 'space-warrior',
+    name: 'Space Warrior',
+    description: 'Galactic fighter in space battle',
+    category: 'action',
+    prompt: 'CRITICAL: Preserve the person\'s exact facial features, skin tone, eye color, nose shape, and bone structure completely unchanged. Transform this person into a space warrior in zero gravity combat, futuristic armor, fighting in space with laser weapons, starship battle background, energy effects, 4K ultra-high resolution, photorealistic, dynamic floating combat pose, sci-fi action cinematography, cosmic lighting. Keep face 100% identical to original.'
   },
 
   // Cultural & Traditional Collection
