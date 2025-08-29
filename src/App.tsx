@@ -8,6 +8,18 @@ import { TRANSFORMATION_OPTIONS } from './config/gemini';
 import { Sparkles, Camera, Image as ImageIcon } from 'lucide-react';
 
 const GlobalStyle = createGlobalStyle`
+  :root {
+    --primary: #ff4d2e;
+    --primary-2: #ff7a59;
+    --text: #e6e9ef;
+    --text-secondary: #b3b9c6;
+    --text-muted: var(--text-secondary);
+    --surface: rgba(255, 255, 255, 0.04);
+    --surface-2: rgba(255, 255, 255, 0.08);
+    --border: rgba(255, 255, 255, 0.12);
+    --shadow-primary: 0 10px 30px rgba(255, 77, 46, 0.25);
+  }
+
   * {
     box-sizing: border-box;
   }
@@ -15,18 +27,24 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: radial-gradient(ellipse at top, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+    background: radial-gradient(1200px 600px at 20% 0%, #0f172a 0%, #0b1020 60%, #060912 100%);
     min-height: 100vh;
-    color: #fff;
+    color: var(--text);
   }
 
   html, body {
     overflow-x: hidden;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
   }
 `;
 
@@ -38,49 +56,73 @@ const AppContainer = styled.div`
 
 const BackgroundAnimation = styled.div`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   z-index: -1;
-  opacity: 0.3;
-  
-  &::before {
+  pointer-events: none;
+
+  &::before, &::after {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 98px,
-      rgba(0, 255, 136, 0.1) 100px
-    );
-    animation: grid-move 20s linear infinite;
-  }
-  
-  &::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 98px,
-      rgba(0, 255, 136, 0.1) 100px
-    );
-    animation: grid-move 20s linear infinite;
+    width: 60vw;
+    height: 60vw;
+    filter: blur(60px);
+    opacity: 0.25;
+    border-radius: 50%;
   }
 
-  @keyframes grid-move {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(100px, 100px); }
+  &::before {
+    top: -10vw;
+    left: -10vw;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 77, 46, 0.35), rgba(255, 77, 46, 0) 60%);
   }
+
+  &::after {
+    right: -10vw;
+    bottom: -10vw;
+    background: radial-gradient(circle at 70% 70%, rgba(255, 122, 89, 0.35), rgba(255, 122, 89, 0) 60%);
+  }
+`;
+
+const BrandBar = styled.nav`
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: calc(env(safe-area-inset-top) + 12px) 16px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(15, 15, 35, 0.9), rgba(15, 15, 35, 0.6));
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+`;
+
+const BrandInner = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const BrandLeft = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const LogoImg = styled.img`
+  height: 28px;
+  width: auto;
+  filter: brightness(0) invert(1);
+
+  @media (min-width: 768px) {
+    height: 32px;
+  }
+`;
+
+const BrandRight = styled.div`
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
 `;
 
 const Header = styled.header`
@@ -93,13 +135,12 @@ const Title = styled.h1`
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 800;
   margin: 0;
-  background: linear-gradient(45deg, #00ff88, #00d4ff, #88ff00, #ff0088);
-  background-size: 400% 400%;
+  background: linear-gradient(90deg, var(--primary), var(--primary-2));
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-shift 3s ease infinite;
-  text-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+  animation: gradient-shift 6s ease infinite;
 
   @keyframes gradient-shift {
     0%, 100% { background-position: 0% 50%; }
@@ -110,7 +151,7 @@ const Title = styled.h1`
 const Subtitle = styled.p`
   font-size: 1.2rem;
   margin: 10px 0 0 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   font-weight: 300;
 `;
 
@@ -126,7 +167,20 @@ const StepIndicator = styled.div`
   align-items: center;
   gap: 20px;
   margin-bottom: 40px;
-  padding: 20px;
+  padding: 12px 20px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (max-width: 640px) {
+    justify-content: flex-start;
+    padding: 12px 10px;
+    gap: 12px;
+  }
 `;
 
 const Step = styled.div<{ $active: boolean; $completed: boolean }>`
@@ -137,19 +191,24 @@ const Step = styled.div<{ $active: boolean; $completed: boolean }>`
   border-radius: 50px;
   font-weight: 600;
   transition: all 0.3s ease;
+
+  @media (max-width: 640px) {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
   
   ${props => props.$completed ? `
-    background: linear-gradient(45deg, #00ff88, #00d4ff);
+    background: linear-gradient(45deg, var(--primary), var(--primary-2));
     color: #000;
-    box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+    box-shadow: var(--shadow-primary);
   ` : props.$active ? `
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid #00ff88;
-    color: #00ff88;
-    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    box-shadow: 0 0 20px rgba(255, 77, 46, 0.2);
   ` : `
     background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.6);
   `}
 `;
 
@@ -157,7 +216,7 @@ const StepConnector = styled.div<{ $completed: boolean }>`
   width: 40px;
   height: 2px;
   background: ${props => props.$completed 
-    ? 'linear-gradient(45deg, #00ff88, #00d4ff)' 
+    ? 'linear-gradient(45deg, var(--primary), var(--primary-2))' 
     : 'rgba(255, 255, 255, 0.2)'};
   transition: all 0.3s ease;
 `;
@@ -174,37 +233,6 @@ const ErrorMessage = styled.div`
   font-weight: 500;
 `;
 
-const ContinueButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 15px 30px;
-  margin: 30px auto 0;
-  border: none;
-  border-radius: 50px;
-  font-size: 18px;
-  font-weight: 600;
-  cursor: pointer;
-  background: linear-gradient(45deg, #00ff88, #00d4ff);
-  color: #000;
-  box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3);
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 25px rgba(0, 255, 136, 0.4);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none !important;
-  }
-`;
 
 type AppStep = 'camera' | 'selection' | 'preview';
 
@@ -382,10 +410,14 @@ const App: React.FC = () => {
       <GlobalStyle />
       <AppContainer>
         <BackgroundAnimation />
-        <Header>
-          <Title>🚀 AI Photo Booth</Title>
-          <Subtitle>Transform yourself with the power of AI</Subtitle>
-        </Header>
+        <BrandBar>
+          <BrandInner>
+            <BrandLeft>
+              <LogoImg src="/piramal-logo.svg" alt="Piramal" />
+            </BrandLeft>
+            <BrandRight>AI Powered</BrandRight>
+          </BrandInner>
+        </BrandBar>
         
         <MainContent>
           {renderStepIndicator()}

@@ -16,10 +16,29 @@ class GeminiService {
       // Convert image to base64
       const imageBase64 = await this.fileToBase64(imageFile);
       
-      // Create the prompt for image generation
-      const fullPrompt = `Based on this input image, generate a new image showing the same person transformed as: ${transformationPrompt}. 
-      Keep the same face and basic features, but apply the transformation completely. 
-      Make it realistic and professional looking.`;
+      // Create the enhanced prompt for 4K cinematic image generation
+      const fullPrompt = `Based on this input image, generate a stunning 4K ultra-high resolution cinematic image showing the same person transformed as: ${transformationPrompt}. 
+
+CRITICAL REQUIREMENTS:
+- Maintain the person's facial structure, bone structure, and key identifying features
+- Apply the transformation completely while preserving their identity
+- Generate in 4K resolution (3840x2160) with exceptional detail and clarity
+- Use professional cinematic lighting techniques with dramatic shadows and highlights
+- Apply advanced post-processing effects: color grading, depth of field, lens flares where appropriate
+- Ensure photorealistic quality with fine textures, realistic materials, and natural lighting
+- Add atmospheric effects like volumetric lighting, particle effects, or environmental ambiance
+- Use cinematic composition with rule of thirds, leading lines, and dynamic framing
+- Apply HDR photography techniques for enhanced dynamic range
+- Include subtle film grain and color correction for a professional movie-quality finish
+
+TECHNICAL SPECIFICATIONS:
+- Resolution: 4K (3840x2160) minimum
+- Color depth: 16-bit per channel
+- Dynamic range: HDR compatible
+- Compression: Minimal, preserve maximum detail
+- Format: High-quality PNG or JPEG with maximum quality settings
+
+Make this image look like it was captured by a professional cinematographer using the highest-end camera equipment and post-production techniques.`;
 
       console.log('Calling Gemini 2.5 Flash Image Preview API...');
 

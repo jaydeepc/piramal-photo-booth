@@ -1,7 +1,7 @@
 import React, { useRef, useCallback, useState } from 'react';
 import Webcam from 'react-webcam';
 import styled from 'styled-components';
-import { Camera, RotateCcw } from 'lucide-react';
+import { Camera, RotateCcw, SwitchCamera } from 'lucide-react';
 
 const CameraContainer = styled.div`
   position: relative;
@@ -10,9 +10,9 @@ const CameraContainer = styled.div`
   margin: 0 auto;
   border-radius: 20px;
   overflow: hidden;
-  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(45deg, var(--primary), var(--primary-2));
   padding: 4px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-primary);
 `;
 
 const CameraWrapper = styled.div`
@@ -45,8 +45,8 @@ const CountdownOverlay = styled.div<{ $show: boolean }>`
 const CountdownText = styled.div`
   font-size: 4rem;
   font-weight: bold;
-  color: #00ff88;
-  text-shadow: 0 0 20px #00ff88;
+  color: var(--primary);
+  text-shadow: 0 0 20px var(--primary);
   animation: pulse 1s ease-in-out;
 
   @keyframes pulse {
@@ -59,8 +59,10 @@ const CountdownText = styled.div`
 const ControlsContainer = styled.div`
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 16px;
   margin-top: 20px;
+  padding: 0 10px;
+  flex-wrap: wrap;
 `;
 
 const ActionButton = styled.button<{ primary?: boolean }>`
@@ -74,23 +76,28 @@ const ActionButton = styled.button<{ primary?: boolean }>`
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+
+  @media (max-width: 640px) {
+    width: 100%;
+    justify-content: center;
+  }
   
   ${props => props.primary ? `
-    background: linear-gradient(45deg, #00ff88, #00d4ff);
+    background: linear-gradient(45deg, var(--primary), var(--primary-2));
     color: #000;
-    box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3);
+    box-shadow: var(--shadow-primary);
     
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 25px rgba(0, 255, 136, 0.4);
+      box-shadow: 0 12px 25px rgba(255, 77, 46, 0.35);
     }
   ` : `
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
     
     &:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: var(--surface-2);
     }
   `}
 
@@ -118,6 +125,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
   const [isCountdown, setIsCountdown] = useState(false);
   const [countdown, setCountdown] = useState(3);
   const [error, setError] = useState<string>('');
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
 
   const capture = useCallback(() => {
     setIsCountdown(true);
@@ -180,6 +188,11 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
     setError('');
   }, []);
 
+  const switchCamera = useCallback(() => {
+    setFacingMode(prev => prev === 'user' ? 'environment' : 'user');
+    setError('');
+  }, []);
+
   return (
     <div>
       <CameraContainer>
@@ -192,7 +205,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
             videoConstraints={{
               width: 480,
               height: 640,
-              facingMode: 'user'
+              facingMode: facingMode
             }}
             onUserMediaError={(error) => {
               console.error('Camera error:', error);
@@ -211,6 +224,10 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
         <ActionButton primary onClick={capture} disabled={isCountdown}>
           <Camera size={20} />
           Take Photo
+        </ActionButton>
+        <ActionButton onClick={switchCamera}>
+          <SwitchCamera size={20} />
+          Switch Camera
         </ActionButton>
         <ActionButton onClick={retake}>
           <RotateCcw size={20} />

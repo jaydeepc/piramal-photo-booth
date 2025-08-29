@@ -23,8 +23,8 @@ const ImagesContainer = styled.div`
 
 const ImageCard = styled.div`
   position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface);
+  border: 2px solid var(--surface-2);
   border-radius: 16px;
   padding: 20px;
   backdrop-filter: blur(10px);
@@ -32,7 +32,7 @@ const ImageCard = styled.div`
 `;
 
 const ImageTitle = styled.h3`
-  color: #fff;
+  color: var(--text);
   font-size: 18px;
   font-weight: 600;
   margin: 0 0 15px 0;
@@ -67,7 +67,7 @@ const LoadingOverlay = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #00ff88;
+  color: var(--primary);
   font-size: 16px;
   font-weight: 600;
 `;
@@ -85,8 +85,9 @@ const LoadingSpinner = styled(Loader)`
 const ControlsContainer = styled.div`
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 16px;
   flex-wrap: wrap;
+  padding: 0 10px;
 `;
 
 const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' | 'danger' }>`
@@ -100,18 +101,23 @@ const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' | 'danger
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+
+  @media (max-width: 640px) {
+    width: 100%;
+    justify-content: center;
+  }
   
   ${props => {
     switch (props.variant) {
       case 'primary':
         return `
-          background: linear-gradient(45deg, #00ff88, #00d4ff);
+          background: linear-gradient(45deg, var(--primary), var(--primary-2));
           color: #000;
-          box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3);
+          box-shadow: var(--shadow-primary);
           
           &:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(0, 255, 136, 0.4);
+            box-shadow: 0 12px 25px rgba(255, 77, 46, 0.35);
           }
         `;
       case 'danger':
@@ -127,12 +133,12 @@ const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' | 'danger
         `;
       default:
         return `
-          background: rgba(255, 255, 255, 0.1);
-          color: #fff;
-          border: 1px solid rgba(255, 255, 255, 0.2);
+          background: var(--surface);
+          color: var(--text);
+          border: 1px solid var(--border);
           
           &:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--surface-2);
           }
         `;
     }
@@ -319,13 +325,8 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
         <PrintableContent ref={printRef}>
           <PrintTitle>AI Photo Booth - {transformationType} Transformation</PrintTitle>
           <PrintImagesContainer>
-            <PrintImageWrapper>
-              <PrintImageTitle>Original</PrintImageTitle>
-              <PrintImage src={originalImage} alt="Original" />
-            </PrintImageWrapper>
             {transformedImage && (
               <PrintImageWrapper>
-                <PrintImageTitle>{transformationType}</PrintImageTitle>
                 <PrintImage src={transformedImage} alt="Transformed" />
               </PrintImageWrapper>
             )}
