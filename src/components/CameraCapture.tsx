@@ -1,0 +1,226 @@
+import React, { useRef, useCallback, useState } from 'react';
+import Webcam from 'react-webcam';
+import styled from 'styled-components';
+import { Camera, RotateCcw } from 'lucide-react';
+
+const CameraContainer = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  padding: 4px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+`;
+
+const CameraWrapper = styled.div`
+  position: relative;
+  background: #000;
+  border-radius: 16px;
+  overflow: hidden;
+`;
+
+const StyledWebcam = styled(Webcam)`
+  width: 100%;
+  height: auto;
+  display: block;
+  transform: scaleX(-1);
+`;
+
+const CountdownOverlay = styled.div<{ $show: boolean }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: ${props => props.$show ? 'flex' : 'none'};
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+`;
+
+const CountdownText = styled.div`
+  font-size: 4rem;
+  font-weight: bold;
+  color: #00ff88;
+  text-shadow: 0 0 20px #00ff88;
+  animation: pulse 1s ease-in-out;
+
+  @keyframes pulse {
+    0% { transform: scale(0.8); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+  }
+`;
+
+const ControlsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+`;
+
+const ActionButton = styled.button<{ primary?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  ${props => props.primary ? `
+    background: linear-gradient(45deg, #00ff88, #00d4ff);
+    color: #000;
+    box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(0, 255, 136, 0.4);
+    }
+  ` : `
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  `}
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+const ErrorMessage = styled.div`
+  color: #ff4444;
+  text-align: center;
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(255, 68, 68, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 68, 68, 0.3);
+`;
+
+interface CameraCaptureProps {
+  onCapture: (imageSrc: string, imageFile: File) => void;
+}
+
+const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
+  const webcamRef = useRef<Webcam>(null);
+  const [isCountdown, setIsCountdown] = useState(false);
+  const [countdown, setCountdown] = useState(3);
+  const [error, setError] = useState<string>('');
+
+  const capture = useCallback(() => {
+    setIsCountdown(true);
+    setError('');
+    
+    let count = 3;
+    setCountdown(count);
+    
+    const countdownInterval = setInterval(() => {
+      count--;
+      setCountdown(count);
+      
+      if (count === 0) {
+        clearInterval(countdownInterval);
+        
+        if (webcamRef.current) {
+          const imageSrc = webcamRef.current.getScreenshot();
+          if (imageSrc) {
+            // Create a canvas to flip the captured image back to normal orientation
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = () => {
+              canvas.width = img.width;
+              canvas.height = img.height;
+              
+              // Flip the image horizontally to correct the mirrored capture
+              ctx!.scale(-1, 1);
+              ctx!.drawImage(img, -img.width, 0);
+              
+              // Convert back to data URL
+              const correctedImageSrc = canvas.toDataURL('image/jpeg', 0.9);
+              
+              // Convert data URL to File
+              fetch(correctedImageSrc)
+                .then(res => res.blob())
+                .then(blob => {
+                  const file = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
+                  onCapture(correctedImageSrc, file);
+                })
+                .catch(err => {
+                  console.error('Error creating file:', err);
+                  setError('Failed to capture photo. Please try again.');
+                });
+            };
+            
+            img.src = imageSrc;
+          } else {
+            setError('Failed to capture photo. Please check camera permissions.');
+          }
+        }
+        
+        setIsCountdown(false);
+      }
+    }, 1000);
+  }, [onCapture]);
+
+  const retake = useCallback(() => {
+    setError('');
+  }, []);
+
+  return (
+    <div>
+      <CameraContainer>
+        <CameraWrapper>
+          <StyledWebcam
+            ref={webcamRef}
+            audio={false}
+            screenshotFormat="image/jpeg"
+            screenshotQuality={0.9}
+            videoConstraints={{
+              width: 480,
+              height: 640,
+              facingMode: 'user'
+            }}
+            onUserMediaError={(error) => {
+              console.error('Camera error:', error);
+              setError('Camera access denied. Please allow camera permissions and refresh the page.');
+            }}
+          />
+          <CountdownOverlay $show={isCountdown}>
+            <CountdownText>
+              {countdown > 0 ? countdown : '📸'}
+            </CountdownText>
+          </CountdownOverlay>
+        </CameraWrapper>
+      </CameraContainer>
+      
+      <ControlsContainer>
+        <ActionButton primary onClick={capture} disabled={isCountdown}>
+          <Camera size={20} />
+          Take Photo
+        </ActionButton>
+        <ActionButton onClick={retake}>
+          <RotateCcw size={20} />
+          Reset
+        </ActionButton>
+      </ControlsContainer>
+      
+      {error && <ErrorMessage>{error}</ErrorMessage>}
+    </div>
+  );
+};
+
+export default CameraCapture;
