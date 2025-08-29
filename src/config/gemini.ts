@@ -1,6 +1,6 @@
 export const GEMINI_CONFIG = {
-  API_KEY: 'AIzaSyDaFkYid0S_1AD6ReRHV5SYMd1JPvHqX-s',
-  MODEL_NAME: 'gemini-2.5-flash-image-preview',
+  API_KEY: process.env.REACT_APP_GEMINI_API_KEY || '',
+  MODEL_NAME: process.env.REACT_APP_GEMINI_MODEL_NAME || 'gemini-2.5-flash-image-preview',
   PROJECT_ID: process.env.REACT_APP_GOOGLE_CLOUD_PROJECT || '',
   LOCATION: process.env.REACT_APP_GOOGLE_CLOUD_LOCATION || 'us-central1'
 };
