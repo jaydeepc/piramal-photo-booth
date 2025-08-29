@@ -6,7 +6,8 @@ import {
   Shield, Wand2, Cpu, Crown, Anchor, Eye, Guitar, 
   Sword, Globe, Cog, Briefcase, Camera, Swords, 
   Skull, Target, Gamepad2, Wheat,
-  Axe, Pyramid, Car
+  Axe, Pyramid, Car, Heart, Flower, Mountain, 
+  Feather
 } from 'lucide-react';
 
 const CategoryTabs = styled.div`
@@ -70,10 +71,16 @@ const OptionsContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
 
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
     padding: 10px;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 8px;
   }
 `;
 
@@ -87,11 +94,27 @@ const OptionCard = styled.div<{ $selected: boolean }>`
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   
+  @media (max-width: 768px) {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+    border-radius: 10px;
+  }
+  
   &:hover {
     transform: translateY(-5px);
     border-color: var(--primary);
     box-shadow: 0 10px 30px rgba(255, 77, 46, 0.2);
     background: var(--surface-2);
+  }
+
+  @media (max-width: 768px) {
+    &:hover {
+      transform: translateY(-2px);
+    }
   }
 
   ${props => props.$selected && `
@@ -209,6 +232,50 @@ const getIconAndColor = (id: string) => {
     'rockstar': { icon: <Guitar size={24} />, color: 'linear-gradient(45deg, #E91E63, #AD1457)' },
     'film-noir-detective': { icon: <User size={24} />, color: 'linear-gradient(45deg, #424242, #616161)' },
     'race-car-driver': { icon: <Car size={24} />, color: 'linear-gradient(45deg, #FF0000, #FF4500)' },
+    
+    // Indian Mythology Collection
+    'lord-krishna': { icon: <Feather size={24} />, color: 'linear-gradient(45deg, #FFD700, #FFA500)' },
+    'lord-rama': { icon: <Target size={24} />, color: 'linear-gradient(45deg, #FF8C00, #FF6347)' },
+    'lord-hanuman': { icon: <Mountain size={24} />, color: 'linear-gradient(45deg, #FF4500, #DC143C)' },
+    'goddess-durga': { icon: <Sword size={24} />, color: 'linear-gradient(45deg, #DC143C, #B22222)' },
+    'lord-shiva': { icon: <Zap size={24} />, color: 'linear-gradient(45deg, #4169E1, #1E90FF)' },
+    'goddess-lakshmi': { icon: <Flower size={24} />, color: 'linear-gradient(45deg, #FFB6C1, #FF69B4)' },
+    'lord-ganesha': { icon: <Heart size={24} />, color: 'linear-gradient(45deg, #FF6347, #FF4500)' },
+    'goddess-saraswati': { icon: <Feather size={24} />, color: 'linear-gradient(45deg, #FFFFFF, #F0F8FF)' },
+    
+    // Indian Men Attire Collection
+    'punjabi-groom': { icon: <Crown size={24} />, color: 'linear-gradient(45deg, #FF8C00, #DAA520)' },
+    'south-indian-groom': { icon: <Flower size={24} />, color: 'linear-gradient(45deg, #FFD700, #FFA500)' },
+    'rajasthani-man': { icon: <Crown size={24} />, color: 'linear-gradient(45deg, #FFD700, #FFA500)' },
+    'bengali-man': { icon: <User size={24} />, color: 'linear-gradient(45deg, #4682B4, #5F9EA0)' },
+    'gujarati-man': { icon: <Star size={24} />, color: 'linear-gradient(45deg, #32CD32, #228B22)' },
+    'kashmiri-man': { icon: <Mountain size={24} />, color: 'linear-gradient(45deg, #87CEEB, #4682B4)' },
+    
+    // Indian Women Attire Collection
+    'punjabi-bride': { icon: <Heart size={24} />, color: 'linear-gradient(45deg, #DC143C, #B22222)' },
+    'south-indian-bride': { icon: <Flower size={24} />, color: 'linear-gradient(45deg, #FFD700, #FFA500)' },
+    'rajasthani-woman': { icon: <Crown size={24} />, color: 'linear-gradient(45deg, #FFD700, #FFA500)' },
+    'bengali-woman': { icon: <Flower size={24} />, color: 'linear-gradient(45deg, #DC143C, #B22222)' },
+    'gujarati-woman': { icon: <Star size={24} />, color: 'linear-gradient(45deg, #FF69B4, #FF1493)' },
+    'kashmiri-woman': { icon: <Mountain size={24} />, color: 'linear-gradient(45deg, #87CEEB, #4682B4)' },
+    'assamese-woman': { icon: <Flower size={24} />, color: 'linear-gradient(45deg, #32CD32, #228B22)' },
+    'kerala-woman': { icon: <Flower size={24} />, color: 'linear-gradient(45deg, #32CD32, #228B22)' },
+    
+    // Lifestyle & Career Collection
+    'fashion-model': { icon: <Camera size={24} />, color: 'linear-gradient(45deg, #FF69B4, #FF1493)' },
+    'business-executive': { icon: <Briefcase size={24} />, color: 'linear-gradient(45deg, #2C3E50, #34495E)' },
+    'athlete-champion': { icon: <Target size={24} />, color: 'linear-gradient(45deg, #FFD700, #FFA500)' },
+    'chef-master': { icon: <Heart size={24} />, color: 'linear-gradient(45deg, #FF6347, #FF4500)' },
+    'artist-painter': { icon: <Palette size={24} />, color: 'linear-gradient(45deg, #9B59B6, #8E44AD)' },
+    'doctor-surgeon': { icon: <Heart size={24} />, color: 'linear-gradient(45deg, #E74C3C, #C0392B)' },
+    'pilot-aviator': { icon: <Rocket size={24} />, color: 'linear-gradient(45deg, #3498DB, #2980B9)' },
+    'teacher-professor': { icon: <User size={24} />, color: 'linear-gradient(45deg, #27AE60, #2ECC71)' },
+    
+    // Adventure & Travel Collection
+    'mountain-climber': { icon: <Mountain size={24} />, color: 'linear-gradient(45deg, #95A5A6, #7F8C8D)' },
+    'scuba-diver': { icon: <Zap size={24} />, color: 'linear-gradient(45deg, #3498DB, #2980B9)' },
+    'safari-explorer': { icon: <Globe size={24} />, color: 'linear-gradient(45deg, #F39C12, #E67E22)' },
+    'motorcycle-rider': { icon: <Car size={24} />, color: 'linear-gradient(45deg, #2C3E50, #34495E)' },
     
     // Legacy options
     farmer: { icon: <Wheat size={24} />, color: 'linear-gradient(45deg, #8B4513, #D2691E)' },

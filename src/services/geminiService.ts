@@ -16,29 +16,36 @@ class GeminiService {
       // Convert image to base64
       const imageBase64 = await this.fileToBase64(imageFile);
       
-      // Create the enhanced prompt for 4K cinematic image generation
-      const fullPrompt = `Based on this input image, generate a stunning 4K ultra-high resolution cinematic image showing the same person transformed as: ${transformationPrompt}. 
+      // Create the enhanced prompt for face-preserving transformation
+      const fullPrompt = `ABSOLUTELY CRITICAL FACE-SWAP TRANSFORMATION INSTRUCTIONS:
 
-CRITICAL REQUIREMENTS:
-- Maintain the person's facial structure, bone structure, and key identifying features
-- Apply the transformation completely while preserving their identity
-- Generate in 4K resolution (3840x2160) with exceptional detail and clarity
-- Use professional cinematic lighting techniques with dramatic shadows and highlights
-- Apply advanced post-processing effects: color grading, depth of field, lens flares where appropriate
-- Ensure photorealistic quality with fine textures, realistic materials, and natural lighting
-- Add atmospheric effects like volumetric lighting, particle effects, or environmental ambiance
-- Use cinematic composition with rule of thirds, leading lines, and dynamic framing
-- Apply HDR photography techniques for enhanced dynamic range
-- Include subtle film grain and color correction for a professional movie-quality finish
+🚨 MANDATORY FACE PRESERVATION RULES:
+1. You MUST use the EXACT face from the input photo - same eyes, nose, mouth, facial structure, skin tone, and ALL facial features
+2. DO NOT generate a new face or use any reference face from your training data
+3. This is a FACE-SWAP operation - keep the original person's face 100% identical
+4. ONLY change the clothing, accessories, background, and body pose
+5. The face must be completely recognizable as the same person from the input photo
 
-TECHNICAL SPECIFICATIONS:
-- Resolution: 4K (3840x2160) minimum
-- Color depth: 16-bit per channel
-- Dynamic range: HDR compatible
-- Compression: Minimal, preserve maximum detail
-- Format: High-quality PNG or JPEG with maximum quality settings
+TRANSFORMATION REQUEST: ${transformationPrompt}
 
-Make this image look like it was captured by a professional cinematographer using the highest-end camera equipment and post-production techniques.`;
+TECHNICAL REQUIREMENTS:
+- Use the input image as the PRIMARY reference for all facial features
+- Preserve exact eye color, eye shape, nose shape, mouth shape, facial bone structure
+- Keep the same skin tone and facial proportions
+- Only modify: clothing, accessories, background, lighting, and pose
+- Generate in high resolution with photorealistic quality
+- Apply professional lighting and cinematography
+- Ensure the transformed person is immediately recognizable as the same individual
+
+VERIFICATION CHECKLIST:
+✓ Same eyes as input photo
+✓ Same nose as input photo  
+✓ Same mouth as input photo
+✓ Same facial structure as input photo
+✓ Same skin tone as input photo
+✓ Only clothing/accessories/background changed
+
+This is a face-preservation transformation - the person's identity must remain completely intact.`;
 
       console.log('Calling Gemini 2.5 Flash Image Preview API...');
 

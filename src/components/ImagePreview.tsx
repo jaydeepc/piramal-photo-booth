@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { Download, Printer, RotateCcw, Loader, RefreshCw } from 'lucide-react';
+import { Download, Printer, RotateCcw, Loader, RefreshCw, Sparkles } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
 
 const PreviewContainer = styled.div`
@@ -223,6 +223,7 @@ interface ImagePreviewProps {
   onRetake: () => void;
   onStartOver: () => void;
   onRegenerate: () => void;
+  onTryAnotherStyle?: () => void;
 }
 
 const ImagePreview: React.FC<ImagePreviewProps> = ({
@@ -233,7 +234,8 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
   transformationType,
   onRetake,
   onStartOver,
-  onRegenerate
+  onRegenerate,
+  onTryAnotherStyle
 }) => {
   const printRef = useRef<HTMLDivElement>(null);
 
@@ -335,6 +337,12 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
               Regenerate
             </ActionButton>
           </>
+        )}
+        {onTryAnotherStyle && (
+          <ActionButton onClick={onTryAnotherStyle}>
+            <Sparkles size={20} />
+            Try Another Style
+          </ActionButton>
         )}
         <ActionButton onClick={onRetake}>
           <RotateCcw size={20} />

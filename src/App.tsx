@@ -291,6 +291,17 @@ const App: React.FC = () => {
     }));
   }, []);
 
+  const handleTryAnotherStyle = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      currentStep: 'selection',
+      selectedTransformation: null,
+      transformedImage: null,
+      isProcessing: false,
+      error: null
+    }));
+  }, []);
+
   const handleStartOver = useCallback(() => {
     setState({
       currentStep: 'camera',
@@ -414,6 +425,7 @@ const App: React.FC = () => {
             onRetake={handleRetake}
             onStartOver={handleStartOver}
             onRegenerate={handleRegenerate}
+            onTryAnotherStyle={handleTryAnotherStyle}
           />
         ) : null;
       
