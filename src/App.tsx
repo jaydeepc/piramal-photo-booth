@@ -1,5 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
+import { Analytics } from '@vercel/analytics/react';
+import LandingPage from './components/LandingPage';
 import CameraCapture from './components/CameraCapture';
 import TransformationOptions from './components/TransformationOptions';
 import ImagePreview from './components/ImagePreview';
@@ -218,6 +220,7 @@ interface AppState {
 }
 
 const App: React.FC = () => {
+  const [showLanding, setShowLanding] = useState(true);
   const [state, setState] = useState<AppState>({
     currentStep: 'camera',
     originalImage: null,
@@ -227,6 +230,10 @@ const App: React.FC = () => {
     isProcessing: false,
     error: null
   });
+
+  const handleEnterApp = useCallback(() => {
+    setShowLanding(false);
+  }, []);
 
   const handlePhotoCapture = useCallback((imageSrc: string, imageFile: File) => {
     setState(prev => ({
@@ -415,6 +422,16 @@ const App: React.FC = () => {
     }
   };
 
+  if (showLanding) {
+    return (
+      <ThemeProvider theme={{}}>
+        <GlobalStyle />
+        <LandingPage onEnterApp={handleEnterApp} />
+        <Analytics />
+      </ThemeProvider>
+    );
+  }
+
   return (
     <ThemeProvider theme={{}}>
       <GlobalStyle />
@@ -437,6 +454,7 @@ const App: React.FC = () => {
           {renderCurrentStep()}
         </MainContent>
       </AppContainer>
+      <Analytics />
     </ThemeProvider>
   );
 };
