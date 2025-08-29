@@ -125,35 +125,6 @@ const BrandRight = styled.div`
   color: rgba(255, 255, 255, 0.6);
 `;
 
-const Header = styled.header`
-  text-align: center;
-  padding: 40px 20px;
-  position: relative;
-`;
-
-const Title = styled.h1`
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 800;
-  margin: 0;
-  background: linear-gradient(90deg, var(--primary), var(--primary-2));
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradient-shift 6s ease infinite;
-
-  @keyframes gradient-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-`;
-
-const Subtitle = styled.p`
-  font-size: 1.2rem;
-  margin: 10px 0 0 0;
-  color: var(--text-secondary);
-  font-weight: 300;
-`;
 
 const MainContent = styled.main`
   max-width: 1200px;

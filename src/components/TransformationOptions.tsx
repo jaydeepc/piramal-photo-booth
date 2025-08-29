@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { TRANSFORMATION_OPTIONS } from '../config/gemini';
+import { TRANSFORMATION_OPTIONS, CATEGORY_INFO } from '../config/gemini';
 import { 
   Sparkles, User, Rocket, Zap, Star, Palette, Clock, 
   Shield, Wand2, Cpu, Crown, Anchor, Eye, Guitar, 
-  Sword, Globe, Cog, Briefcase, Camera
+  Sword, Globe, Cog, Briefcase, Camera, Swords, 
+  Skull, Target, Gamepad2, Wheat,
+  Axe, Pyramid, Car
 } from 'lucide-react';
 
 const CategoryTabs = styled.div`
@@ -161,40 +163,57 @@ interface TransformationOptionsProps {
 
 const getIconAndColor = (id: string) => {
   const iconMap = {
-    // Superhero Collection
-    'superhero-classic': { icon: <Shield size={24} />, color: 'linear-gradient(45deg, #FF6B35, #F7931E)' },
-    'superhero-dark': { icon: <Zap size={24} />, color: 'linear-gradient(45deg, #2C3E50, #34495E)' },
-    'superhero-cosmic': { icon: <Globe size={24} />, color: 'linear-gradient(45deg, #667eea, #764ba2)' },
-    
-    // Fantasy Collection
-    'wizard': { icon: <Wand2 size={24} />, color: 'linear-gradient(45deg, #8E44AD, #9B59B6)' },
-    'warrior-princess': { icon: <Sword size={24} />, color: 'linear-gradient(45deg, #E74C3C, #C0392B)' },
-    'dragon-rider': { icon: <Sparkles size={24} />, color: 'linear-gradient(45deg, #27AE60, #2ECC71)' },
-    
-    // Sci-Fi Collection
-    'cyberpunk-hacker': { icon: <Cpu size={24} />, color: 'linear-gradient(45deg, #00D4FF, #0099CC)' },
-    'space-marine': { icon: <Rocket size={24} />, color: 'linear-gradient(45deg, #1e3c72, #2a5298)' },
-    'time-traveler': { icon: <Clock size={24} />, color: 'linear-gradient(45deg, #FF8A80, #FF5722)' },
-    
-    // Classic Collection
-    'pirate-captain': { icon: <Anchor size={24} />, color: 'linear-gradient(45deg, #8B4513, #D2691E)' },
-    'royal-monarch': { icon: <Crown size={24} />, color: 'linear-gradient(45deg, #FFD700, #FFA500)' },
-    'steampunk-inventor': { icon: <Cog size={24} />, color: 'linear-gradient(45deg, #795548, #8D6E63)' },
-    
-    // Modern Collection
-    'secret-agent': { icon: <Eye size={24} />, color: 'linear-gradient(45deg, #37474F, #455A64)' },
-    'rockstar': { icon: <Guitar size={24} />, color: 'linear-gradient(45deg, #E91E63, #AD1457)' },
-    'film-noir-detective': { icon: <User size={24} />, color: 'linear-gradient(45deg, #424242, #616161)' },
-    
     // Professional Collection
     'linkedin-photo': { icon: <Briefcase size={24} />, color: 'linear-gradient(45deg, #0077B5, #005885)' },
     'studio-photo-black': { icon: <Camera size={24} />, color: 'linear-gradient(45deg, #000000, #333333)' },
     'studio-photo-white': { icon: <Camera size={24} />, color: 'linear-gradient(45deg, #FFFFFF, #F0F0F0)' },
     
+    // Superhero Collection
+    'superhero-classic': { icon: <Shield size={24} />, color: 'linear-gradient(45deg, #FF6B35, #F7931E)' },
+    'superhero-dark': { icon: <Zap size={24} />, color: 'linear-gradient(45deg, #2C3E50, #34495E)' },
+    'superhero-cosmic': { icon: <Globe size={24} />, color: 'linear-gradient(45deg, #667eea, #764ba2)' },
+    'super-villain': { icon: <Skull size={24} />, color: 'linear-gradient(45deg, #8B0000, #DC143C)' },
+    
+    // Action & Adventure Collection
+    'alien-fighter': { icon: <Rocket size={24} />, color: 'linear-gradient(45deg, #00FF7F, #32CD32)' },
+    'monster-hunter': { icon: <Target size={24} />, color: 'linear-gradient(45deg, #8B4513, #A0522D)' },
+    'zombie-survivor': { icon: <Skull size={24} />, color: 'linear-gradient(45deg, #556B2F, #6B8E23)' },
+    'ninja-warrior': { icon: <Swords size={24} />, color: 'linear-gradient(45deg, #2F4F4F, #708090)' },
+    
+    // Cultural & Traditional Collection
+    'indian-farmer': { icon: <Wheat size={24} />, color: 'linear-gradient(45deg, #DAA520, #B8860B)' },
+    'samurai-warrior': { icon: <Sword size={24} />, color: 'linear-gradient(45deg, #DC143C, #B22222)' },
+    'viking-berserker': { icon: <Axe size={24} />, color: 'linear-gradient(45deg, #4682B4, #5F9EA0)' },
+    'egyptian-pharaoh': { icon: <Pyramid size={24} />, color: 'linear-gradient(45deg, #FFD700, #FFA500)' },
+    
+    // Fantasy Collection
+    'wizard': { icon: <Wand2 size={24} />, color: 'linear-gradient(45deg, #8E44AD, #9B59B6)' },
+    'warrior-princess': { icon: <Sword size={24} />, color: 'linear-gradient(45deg, #E74C3C, #C0392B)' },
+    'dragon-rider': { icon: <Sparkles size={24} />, color: 'linear-gradient(45deg, #27AE60, #2ECC71)' },
+    'elven-archer': { icon: <Target size={24} />, color: 'linear-gradient(45deg, #228B22, #32CD32)' },
+    
+    // Sci-Fi Collection
+    'cyberpunk-hacker': { icon: <Cpu size={24} />, color: 'linear-gradient(45deg, #00D4FF, #0099CC)' },
+    'space-marine': { icon: <Rocket size={24} />, color: 'linear-gradient(45deg, #1e3c72, #2a5298)' },
+    'time-traveler': { icon: <Clock size={24} />, color: 'linear-gradient(45deg, #FF8A80, #FF5722)' },
+    'robot-pilot': { icon: <Gamepad2 size={24} />, color: 'linear-gradient(45deg, #FF4500, #FF6347)' },
+    
+    // Classic Collection
+    'pirate-captain': { icon: <Anchor size={24} />, color: 'linear-gradient(45deg, #8B4513, #D2691E)' },
+    'royal-monarch': { icon: <Crown size={24} />, color: 'linear-gradient(45deg, #FFD700, #FFA500)' },
+    'steampunk-inventor': { icon: <Cog size={24} />, color: 'linear-gradient(45deg, #795548, #8D6E63)' },
+    'wild-west-gunslinger': { icon: <Target size={24} />, color: 'linear-gradient(45deg, #D2691E, #CD853F)' },
+    
+    // Modern Collection
+    'secret-agent': { icon: <Eye size={24} />, color: 'linear-gradient(45deg, #37474F, #455A64)' },
+    'rockstar': { icon: <Guitar size={24} />, color: 'linear-gradient(45deg, #E91E63, #AD1457)' },
+    'film-noir-detective': { icon: <User size={24} />, color: 'linear-gradient(45deg, #424242, #616161)' },
+    'race-car-driver': { icon: <Car size={24} />, color: 'linear-gradient(45deg, #FF0000, #FF4500)' },
+    
     // Legacy options
-    farmer: { icon: <Sparkles size={24} />, color: 'linear-gradient(45deg, #8B4513, #D2691E)' },
+    farmer: { icon: <Wheat size={24} />, color: 'linear-gradient(45deg, #8B4513, #D2691E)' },
     astronaut: { icon: <Rocket size={24} />, color: 'linear-gradient(45deg, #1e3c72, #2a5298)' },
-    supervillain: { icon: <Zap size={24} />, color: 'linear-gradient(45deg, #434343, #000000)' },
+    supervillain: { icon: <Skull size={24} />, color: 'linear-gradient(45deg, #434343, #000000)' },
     filmstar: { icon: <Star size={24} />, color: 'linear-gradient(45deg, #FFD700, #FFA500)' },
     cartoon: { icon: <Palette size={24} />, color: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)' },
     elderly: { icon: <Clock size={24} />, color: 'linear-gradient(45deg, #8e44ad, #9b59b6)' }
@@ -206,15 +225,25 @@ const TransformationOptions: React.FC<TransformationOptionsProps> = ({
   selectedOption, 
   onSelect 
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>('professional');
   
-  // Get unique categories
+  // Get unique categories from TRANSFORMATION_OPTIONS
   const categories = ['all', ...Array.from(new Set(TRANSFORMATION_OPTIONS.map(option => option.category).filter(Boolean)))];
   
   // Filter options by category
   const filteredOptions = selectedCategory === 'all' 
     ? TRANSFORMATION_OPTIONS 
     : TRANSFORMATION_OPTIONS.filter(option => option.category === selectedCategory);
+
+  const getCategoryDisplayName = (category: string) => {
+    if (category === 'all') return 'All Styles';
+    return CATEGORY_INFO[category as keyof typeof CATEGORY_INFO]?.name || category;
+  };
+
+  const getCategoryIcon = (category: string) => {
+    if (category === 'all') return '🎭';
+    return CATEGORY_INFO[category as keyof typeof CATEGORY_INFO]?.icon || '🎭';
+  };
 
   return (
     <div>
@@ -227,7 +256,8 @@ const TransformationOptions: React.FC<TransformationOptionsProps> = ({
             $active={selectedCategory === category}
             onClick={() => setSelectedCategory(category)}
           >
-            {category === 'all' ? 'All Styles' : category}
+            <span style={{ marginRight: '8px' }}>{getCategoryIcon(category)}</span>
+            {getCategoryDisplayName(category)}
           </CategoryTab>
         ))}
       </CategoryTabs>

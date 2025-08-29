@@ -6,6 +6,29 @@ export const GEMINI_CONFIG = {
 };
 
 export const TRANSFORMATION_OPTIONS = [
+  // Professional Collection
+  {
+    id: 'linkedin-photo',
+    name: 'LinkedIn Photo',
+    description: 'Professional headshot for career',
+    category: 'professional',
+    prompt: 'Create a professional LinkedIn headshot while preserving the person\'s exact facial features, skin tone, and bone structure. Only change: business attire (suit or professional shirt), clean corporate background, professional studio lighting, confident and approachable expression. Keep the person\'s face completely unchanged. 4K ultra-high resolution, photorealistic, corporate photography style, sharp focus, professional color grading'
+  },
+  {
+    id: 'studio-photo-black',
+    name: 'Studio Photo - Black Background',
+    description: 'Elegant studio portrait with black backdrop',
+    category: 'professional',
+    prompt: 'Create an elegant studio portrait while preserving the person\'s exact facial features, skin tone, and bone structure. Only change: professional attire, pure black background, dramatic studio lighting setup. Keep the person\'s face completely unchanged. 4K ultra-high resolution, photorealistic, high contrast lighting, fashion photography style, sharp details, professional color grading'
+  },
+  {
+    id: 'studio-photo-white',
+    name: 'Studio Photo - White Background',
+    description: 'Bright studio portrait with dramatic lights',
+    category: 'professional',
+    prompt: 'Create a bright studio portrait while preserving the person\'s exact facial features, skin tone, and bone structure. Only change: professional attire, pure white background, dramatic studio lighting with multiple light sources. Keep the person\'s face completely unchanged. 4K ultra-high resolution, photorealistic, high-key lighting, fashion photography style, crisp details, professional color grading'
+  },
+
   // Superhero Collection
   {
     id: 'superhero-classic',
@@ -28,7 +51,74 @@ export const TRANSFORMATION_OPTIONS = [
     category: 'superhero',
     prompt: 'Transform this person into a cosmic superhero with glowing energy effects, stellar costume with galaxy patterns, floating in space with nebula background, cosmic energy aura, 4K ultra-high resolution, photorealistic, dramatic pose, particle effects, lens flares, deep space cinematography, ethereal lighting'
   },
-  
+  {
+    id: 'super-villain',
+    name: 'Super Villain',
+    description: 'Menacing arch-nemesis',
+    category: 'superhero',
+    prompt: 'Transform this person into a menacing super villain with dark armor, evil cape, sinister expression, lightning effects, dark fortress background, stormy sky, 4K ultra-high resolution, photorealistic, dramatic pose, red glowing eyes, dark energy effects, villain movie cinematography'
+  },
+
+  // Action & Adventure Collection
+  {
+    id: 'alien-fighter',
+    name: 'Alien Fighter',
+    description: 'Warrior battling extraterrestrial forces',
+    category: 'action',
+    prompt: 'Transform this person into an alien fighter in combat pose with futuristic weapons, battle armor, alien creatures in background, alien planet landscape, energy blasts, 4K ultra-high resolution, photorealistic, dynamic action pose, sci-fi battle effects, epic scale, cinematic lighting'
+  },
+  {
+    id: 'monster-hunter',
+    name: 'Monster Hunter',
+    description: 'Brave hunter facing mythical beasts',
+    category: 'action',
+    prompt: 'Transform this person into a monster hunter with enchanted weapons, leather armor, facing giant monsters in background, dark forest setting, magical effects, 4K cinematic quality, photorealistic, heroic battle stance, fantasy creature effects, dramatic lighting, adventure movie style'
+  },
+  {
+    id: 'zombie-survivor',
+    name: 'Zombie Survivor',
+    description: 'Post-apocalyptic survivor',
+    category: 'action',
+    prompt: 'Transform this person into a zombie apocalypse survivor with tactical gear, weapons, ruined city background, dramatic lighting, 4K ultra-high resolution, photorealistic, determined expression, post-apocalyptic atmosphere, survival movie cinematography, gritty effects'
+  },
+  {
+    id: 'ninja-warrior',
+    name: 'Ninja Warrior',
+    description: 'Stealthy martial arts master',
+    category: 'action',
+    prompt: 'Transform this person into a ninja warrior with traditional black outfit, katana swords, rooftop background at night, moonlight, 4K cinematic quality, photorealistic, dynamic fighting pose, shadow effects, martial arts movie style, atmospheric fog'
+  },
+
+  // Cultural & Traditional Collection
+  {
+    id: 'indian-farmer',
+    name: 'Indian Farmer',
+    description: 'Traditional Indian agricultural worker',
+    category: 'cultural',
+    prompt: 'Transform this person into a traditional Indian farmer with authentic rural clothing, turban, farming tools, lush green fields background, golden hour lighting, 4K ultra-high resolution, photorealistic, dignified pose, cultural authenticity, documentary photography style, warm natural lighting'
+  },
+  {
+    id: 'samurai-warrior',
+    name: 'Samurai Warrior',
+    description: 'Honorable Japanese warrior',
+    category: 'cultural',
+    prompt: 'Transform this person into a samurai warrior with traditional armor, katana sword, cherry blossom background, ancient Japanese temple, 4K cinematic quality, photorealistic, honorable stance, cultural details, period drama cinematography, dramatic lighting'
+  },
+  {
+    id: 'viking-berserker',
+    name: 'Viking Berserker',
+    description: 'Fierce Norse warrior',
+    category: 'cultural',
+    prompt: 'Transform this person into a Viking berserker with fur armor, battle axe, longship background, stormy seas, 4K ultra-high resolution, photorealistic, fierce expression, Nordic atmosphere, epic movie cinematography, dramatic weather effects'
+  },
+  {
+    id: 'egyptian-pharaoh',
+    name: 'Egyptian Pharaoh',
+    description: 'Ancient Egyptian ruler',
+    category: 'cultural',
+    prompt: 'Transform this person into an Egyptian pharaoh with golden headdress, royal robes, pyramid background, desert landscape, 4K cinematic quality, photorealistic, regal pose, ancient Egyptian aesthetics, golden hour lighting, historical epic style'
+  },
+
   // Fantasy Collection
   {
     id: 'wizard',
@@ -51,7 +141,14 @@ export const TRANSFORMATION_OPTIONS = [
     category: 'fantasy',
     prompt: 'Transform this person into a dragon rider with leather armor, dragon-scale accessories, majestic dragon in background, mountain peaks and clouds, dramatic sky, 4K cinematic quality, photorealistic, wind effects, epic scale, volumetric lighting, fantasy adventure cinematography'
   },
-  
+  {
+    id: 'elven-archer',
+    name: 'Elven Archer',
+    description: 'Graceful forest guardian',
+    category: 'fantasy',
+    prompt: 'Transform this person into an elven archer with elegant bow, forest armor, pointed ears, enchanted forest background, magical lighting, 4K ultra-high resolution, photorealistic, graceful pose, nature magic effects, fantasy movie style, ethereal atmosphere'
+  },
+
   // Sci-Fi Collection
   {
     id: 'cyberpunk-hacker',
@@ -74,7 +171,14 @@ export const TRANSFORMATION_OPTIONS = [
     category: 'sci-fi',
     prompt: 'Transform this person into a time traveler with steampunk-futuristic outfit, temporal energy effects, swirling time vortex background, multiple reality fragments, 4K ultra-high resolution, photorealistic, dynamic pose, energy particles, cinematic lighting, sci-fi adventure style'
   },
-  
+  {
+    id: 'robot-pilot',
+    name: 'Mech Pilot',
+    description: 'Giant robot operator',
+    category: 'sci-fi',
+    prompt: 'Transform this person into a mech pilot with high-tech suit, neural interface, giant robot in background, futuristic battlefield, 4K cinematic quality, photorealistic, determined expression, sci-fi battle effects, mecha anime style, dramatic lighting'
+  },
+
   // Classic Collection
   {
     id: 'pirate-captain',
@@ -97,7 +201,14 @@ export const TRANSFORMATION_OPTIONS = [
     category: 'classic',
     prompt: 'Transform this person into a steampunk inventor with brass goggles, leather apron, mechanical gadgets, Victorian workshop background with steam and gears, warm lighting, 4K cinematic quality, photorealistic, intricate details, atmospheric effects, steampunk movie style'
   },
-  
+  {
+    id: 'wild-west-gunslinger',
+    name: 'Wild West Gunslinger',
+    description: 'Frontier cowboy hero',
+    category: 'classic',
+    prompt: 'Transform this person into a Wild West gunslinger with cowboy hat, leather vest, revolvers, desert town background, sunset lighting, 4K ultra-high resolution, photorealistic, confident stance, western movie cinematography, dust effects, dramatic shadows'
+  },
+
   // Modern Collection
   {
     id: 'secret-agent',
@@ -120,27 +231,55 @@ export const TRANSFORMATION_OPTIONS = [
     category: 'modern',
     prompt: 'Transform this person into a film noir detective with trench coat, fedora hat, cigarette smoke, rainy city street background at night, dramatic shadows, 4K ultra-high resolution, photorealistic, moody lighting, black and white with color accents, classic cinema style'
   },
-  
-  // Professional Collection
   {
-    id: 'linkedin-photo',
-    name: 'LinkedIn Photo',
-    description: 'Professional headshot for career',
-    category: 'professional',
-    prompt: 'Transform this person into a professional LinkedIn headshot with business attire, confident smile, clean corporate background, professional studio lighting, 4K ultra-high resolution, photorealistic, approachable expression, corporate photography style, sharp focus, professional color grading'
-  },
-  {
-    id: 'studio-photo-black',
-    name: 'Studio Photo - Black Background',
-    description: 'Elegant studio portrait with black backdrop',
-    category: 'professional',
-    prompt: 'Transform this person into an elegant studio portrait with pure black background, dramatic studio lighting, professional attire, sophisticated pose, 4K ultra-high resolution, photorealistic, high contrast lighting, fashion photography style, sharp details, professional color grading'
-  },
-  {
-    id: 'studio-photo-white',
-    name: 'Studio Photo - White Background',
-    description: 'Bright studio portrait with dramatic lights',
-    category: 'professional',
-    prompt: 'Transform this person into a bright studio portrait with pure white background, dramatic studio lighting with multiple light sources, professional attire, confident pose, 4K ultra-high resolution, photorealistic, high-key lighting, fashion photography style, crisp details, professional color grading, dramatic shadows and highlights'
+    id: 'race-car-driver',
+    name: 'Race Car Driver',
+    description: 'Professional racing champion',
+    category: 'modern',
+    prompt: 'Transform this person into a race car driver with racing suit, helmet, race car background, speedway track, 4K cinematic quality, photorealistic, determined expression, speed effects, motorsport photography style, dynamic lighting'
   }
 ];
+
+// Category definitions for better UX
+export const CATEGORY_INFO = {
+  professional: {
+    name: 'Professional',
+    description: 'Business and career-focused portraits',
+    icon: '💼'
+  },
+  superhero: {
+    name: 'Superhero',
+    description: 'Heroic characters with superpowers',
+    icon: '🦸'
+  },
+  action: {
+    name: 'Action & Adventure',
+    description: 'Dynamic action and combat scenes',
+    icon: '⚔️'
+  },
+  cultural: {
+    name: 'Cultural & Traditional',
+    description: 'Traditional and cultural characters',
+    icon: '🌍'
+  },
+  fantasy: {
+    name: 'Fantasy',
+    description: 'Magical and mythical characters',
+    icon: '🧙'
+  },
+  'sci-fi': {
+    name: 'Sci-Fi',
+    description: 'Futuristic and space-age characters',
+    icon: '🚀'
+  },
+  classic: {
+    name: 'Classic',
+    description: 'Historical and timeless characters',
+    icon: '🎭'
+  },
+  modern: {
+    name: 'Modern',
+    description: 'Contemporary and lifestyle characters',
+    icon: '🎸'
+  }
+};
