@@ -217,6 +217,7 @@ interface AppState {
   transformedImage: string | null;
   isProcessing: boolean;
   error: string | null;
+  userHeight: string | null;
 }
 
 const App: React.FC = () => {
@@ -228,18 +229,20 @@ const App: React.FC = () => {
     selectedTransformation: null,
     transformedImage: null,
     isProcessing: false,
-    error: null
+    error: null,
+    userHeight: null
   });
 
   const handleEnterApp = useCallback(() => {
     setShowLanding(false);
   }, []);
 
-  const handlePhotoCapture = useCallback((imageSrc: string, imageFile: File) => {
+  const handlePhotoCapture = useCallback((imageSrc: string, imageFile: File, userHeight?: string) => {
     setState(prev => ({
       ...prev,
       originalImage: imageSrc,
       originalImageFile: imageFile,
+      userHeight: userHeight || null,
       currentStep: 'selection',
       error: null
     }));
@@ -259,9 +262,20 @@ const App: React.FC = () => {
     }));
 
     try {
+      // Determine reference image URL based on transformation type
+      let referenceImageUrl: string | undefined;
+      
+      if (transformation.requiresAryaImage) {
+        referenceImageUrl = '/arya-photos/photo-with-arya/Arya.png';
+      } else if (transformation.requiresTshirtImage) {
+        referenceImageUrl = '/arya-photos/tshirt/arya-tshirt.jpeg';
+      }
+
       const transformedImages = await geminiService.transformImage(
         state.originalImageFile,
-        transformation.prompt
+        transformation.prompt,
+        referenceImageUrl,
+        state.userHeight || undefined
       );
 
       if (transformedImages.length > 0) {
@@ -281,7 +295,7 @@ const App: React.FC = () => {
         error: error instanceof Error ? error.message : 'Failed to transform image'
       }));
     }
-  }, [state.originalImageFile]);
+  }, [state.originalImageFile, state.userHeight]);
 
   const handleRetake = useCallback(() => {
     setState(prev => ({
@@ -310,7 +324,8 @@ const App: React.FC = () => {
       selectedTransformation: null,
       transformedImage: null,
       isProcessing: false,
-      error: null
+      error: null,
+      userHeight: null
     });
   }, []);
 
@@ -328,9 +343,20 @@ const App: React.FC = () => {
     }));
 
     try {
+      // Determine reference image URL based on transformation type
+      let referenceImageUrl: string | undefined;
+      
+      if (transformation.requiresAryaImage) {
+        referenceImageUrl = '/arya-photos/photo-with-arya/Arya.png';
+      } else if (transformation.requiresTshirtImage) {
+        referenceImageUrl = '/arya-photos/tshirt/arya-tshirt.jpeg';
+      }
+
       const transformedImages = await geminiService.transformImage(
         state.originalImageFile,
-        transformation.prompt
+        transformation.prompt,
+        referenceImageUrl,
+        state.userHeight || undefined
       );
 
       if (transformedImages.length > 0) {
@@ -350,7 +376,7 @@ const App: React.FC = () => {
         error: error instanceof Error ? error.message : 'Failed to regenerate image'
       }));
     }
-  }, [state.selectedTransformation, state.originalImageFile]);
+  }, [state.selectedTransformation, state.originalImageFile, state.userHeight]);
 
   const getSelectedTransformationName = () => {
     if (!state.selectedTransformation) return '';

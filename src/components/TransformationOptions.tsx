@@ -7,7 +7,7 @@ import {
   Sword, Globe, Cog, Briefcase, Camera, Swords, 
   Skull, Target, Gamepad2, Wheat,
   Axe, Pyramid, Car, Heart, Flower, Mountain, 
-  Feather
+  Feather, Shirt, Mic
 } from 'lucide-react';
 
 const CategoryTabs = styled.div`
@@ -184,6 +184,7 @@ interface TransformationOptionsProps {
   onSelect: (optionId: string) => void;
 }
 
+
 const getIconAndColor = (id: string) => {
   const iconMap = {
     // Professional Collection
@@ -283,7 +284,14 @@ const getIconAndColor = (id: string) => {
     supervillain: { icon: <Skull size={24} />, color: 'linear-gradient(45deg, #434343, #000000)' },
     filmstar: { icon: <Star size={24} />, color: 'linear-gradient(45deg, #FFD700, #FFA500)' },
     cartoon: { icon: <Palette size={24} />, color: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)' },
-    elderly: { icon: <Clock size={24} />, color: 'linear-gradient(45deg, #8e44ad, #9b59b6)' }
+    elderly: { icon: <Clock size={24} />, color: 'linear-gradient(45deg, #8e44ad, #9b59b6)' },
+    
+    // Arya Collection
+    'photo-with-arya-formal': { icon: <Briefcase size={24} />, color: 'linear-gradient(45deg, #00D4FF, #0099CC)' },
+    'photo-with-arya-casual': { icon: <User size={24} />, color: 'linear-gradient(45deg, #32CD32, #228B22)' },
+    'photo-with-arya-traditional': { icon: <Crown size={24} />, color: 'linear-gradient(45deg, #FFD700, #FFA500)' },
+    'photo-with-arya-podcast': { icon: <Mic size={24} />, color: 'linear-gradient(45deg, #9B59B6, #8E44AD)' },
+    'arya-tshirt': { icon: <Shirt size={24} />, color: 'linear-gradient(45deg, #FF6B35, #F7931E)' }
   };
   return iconMap[id as keyof typeof iconMap] || { icon: <User size={24} />, color: 'linear-gradient(45deg, #666, #888)' };
 };
@@ -292,7 +300,7 @@ const TransformationOptions: React.FC<TransformationOptionsProps> = ({
   selectedOption, 
   onSelect 
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('professional');
+  const [selectedCategory, setSelectedCategory] = useState<string>('arya');
   
   // Get unique categories from TRANSFORMATION_OPTIONS
   const categories = ['all', ...Array.from(new Set(TRANSFORMATION_OPTIONS.map(option => option.category).filter(Boolean)))];

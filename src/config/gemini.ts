@@ -128,6 +128,56 @@ export const TRANSFORMATION_OPTIONS = [
     description: 'Academic scholar and educator',
     category: 'lifestyle',
     prompt: 'CRITICAL: Preserve the person\'s exact facial features, skin tone, eye color, nose shape, and bone structure completely unchanged. Transform this person into a university professor with full body academic attire, library or classroom background with bookshelves, desk, blackboard, books, academic materials and complete educational environment. Show complete full body transformation in academic setting. 4K cinematic quality, photorealistic, wise and intellectual expression, academic photography style, scholarly lighting. Keep face 100% identical to original.'
+  },
+
+  // Arya Collection - Photos with Arya - Business Formal
+  {
+    id: 'photo-with-arya-formal',
+    name: 'Photo with Arya - Business Formal',
+    description: 'Professional business attire with Arya',
+    category: 'arya',
+    prompt: 'CRITICAL: Preserve the person\'s exact facial features, skin tone, eye color, nose shape, and bone structure completely unchanged. Create a full body photo showing this person in professional business formal attire (suit, blazer, or formal shirt) posing alongside Arya as a real-life human-sized character. POSITIONING: Position them standing shoulder-to-shoulder with NO GAP between them - they should be touching shoulders and standing very close together like close friends posing for a photo with warm, friendly smiles and relaxed body language. Use the provided Arya image exactly as reference for Arya\'s appearance - do not modify Arya\'s look, clothing, or design at all. Scale Arya to normal human proportions (similar height to the person) so they appear as two people standing together intimately. Background should be an elegant Indian tech/fintech product launch event with modern stage setup, professional lighting, elegant backdrop, and sophisticated event ambiance - NO TEXT, BANNERS, OR WRITING visible anywhere in the background. Clean, upscale launch event environment with contemporary Indian corporate event styling. Both individuals should appear as normal human-sized people at a high-end product launch event in India, positioned very close together with no space between them, displaying friendly and approachable expressions. 4K ultra-high resolution, photorealistic, event photography style, professional lighting. Keep the person\'s face 100% identical to original and keep Arya\'s design exactly as shown in the reference image but scaled to human size.',
+    requiresAryaImage: true
+  },
+
+  // Arya Collection - Photos with Arya - Smart Casual
+  {
+    id: 'photo-with-arya-casual',
+    name: 'Photo with Arya - Smart Casual',
+    description: 'Smart casual outfit with Arya',
+    category: 'arya',
+    prompt: 'CRITICAL: Preserve the person\'s exact facial features, skin tone, eye color, nose shape, and bone structure completely unchanged. Create a full body photo showing this person in smart casual attire (polo shirt, casual blazer, or neat shirt with trousers) posing alongside Arya as a real-life human-sized character. POSITIONING: Position them standing shoulder-to-shoulder with NO GAP between them - they should be touching shoulders and standing very close together like close friends posing for a photo with warm, friendly smiles and relaxed body language. Use the provided Arya image exactly as reference for Arya\'s appearance - do not modify Arya\'s look, clothing, or design at all. Scale Arya to normal human proportions (similar height to the person) so they appear as two people standing together intimately. Background should be an elegant Indian tech/fintech product launch event with modern stage setup, professional lighting, elegant backdrop, and sophisticated event ambiance - NO TEXT, BANNERS, OR WRITING visible anywhere in the background. Clean, upscale launch event environment with contemporary Indian corporate event styling. Both individuals should appear as normal human-sized people at a high-end product launch event in India, positioned very close together with no space between them, displaying friendly and approachable expressions. 4K ultra-high resolution, photorealistic, event photography style, natural lighting. Keep the person\'s face 100% identical to original and keep Arya\'s design exactly as shown in the reference image but scaled to human size.',
+    requiresAryaImage: true
+  },
+
+  // Arya Collection - Photos with Arya - Traditional Indian
+  {
+    id: 'photo-with-arya-traditional',
+    name: 'Photo with Arya - Traditional Indian',
+    description: 'Traditional Indian attire with Arya',
+    category: 'arya',
+    prompt: 'CRITICAL: Preserve the person\'s exact facial features, skin tone, eye color, nose shape, and bone structure completely unchanged. Create a full body photo showing this person in elegant traditional Indian attire (kurta, sherwani, or traditional shirt with appropriate bottoms) posing alongside Arya as a real-life human-sized character. POSITIONING: Position them standing shoulder-to-shoulder with NO GAP between them - they should be touching shoulders and standing very close together like close friends posing for a photo with warm, friendly smiles and relaxed body language. Use the provided Arya image exactly as reference for Arya\'s appearance - do not modify Arya\'s look, clothing, or design at all. Scale Arya to normal human proportions (similar height to the person) so they appear as two people standing together intimately. Background should be an elegant Indian tech/fintech product launch event with modern stage setup, professional lighting, elegant backdrop, and sophisticated event ambiance - NO TEXT, BANNERS, OR WRITING visible anywhere in the background. Clean, upscale launch event environment that blends modern and traditional Indian elements. Both individuals should appear as normal human-sized people at a high-end product launch event in India, positioned very close together with no space between them, displaying friendly and approachable expressions. 4K ultra-high resolution, photorealistic, event photography style, warm professional lighting. Keep the person\'s face 100% identical to original and keep Arya\'s design exactly as shown in the reference image but scaled to human size.',
+    requiresAryaImage: true
+  },
+
+  // Arya Collection - Podcast Interview
+  {
+    id: 'photo-with-arya-podcast',
+    name: 'Podcast Interview with Arya',
+    description: 'Sitting interview setup with microphones',
+    category: 'arya',
+    prompt: 'CRITICAL: Preserve the person\'s exact facial features, skin tone, eye color, nose shape, and bone structure completely unchanged. Create a photo showing this person and Arya sitting side by side in comfortable chairs for a podcast interview setup. POSITIONING: Position them sitting close together with professional microphones in front of both of them, displaying warm, friendly smiles and engaged conversation body language. Use the provided Arya image exactly as reference for Arya\'s appearance - do not modify Arya\'s look, clothing, or design at all. Scale Arya to normal human proportions (similar height to the person) so they appear as two people in an interview setting. Background should be an elegant Indian tech/fintech product launch event interview area with modern setup, professional lighting, elegant backdrop, and sophisticated event ambiance - NO TEXT, BANNERS, OR WRITING visible anywhere in the background. Clean, upscale podcast interview setup at a high-end product launch event in India. Both individuals should appear as normal human-sized people sitting comfortably in an interview setting, displaying friendly and engaging expressions as if having a great conversation. Include professional podcast microphones, headphones on a table, and modern interview setup elements. 4K ultra-high resolution, photorealistic, interview photography style, warm professional lighting. Keep the person\'s face 100% identical to original and keep Arya\'s design exactly as shown in the reference image but scaled to human size.',
+    requiresAryaImage: true
+  },
+
+  // Arya Collection - T-shirt Photos
+  {
+    id: 'arya-tshirt',
+    name: 'Arya T-shirt Photo',
+    description: 'Wear the official Arya branded T-shirt',
+    category: 'arya',
+    prompt: 'CRITICAL: Preserve the person\'s exact facial features, skin tone, eye color, nose shape, and bone structure completely unchanged. Transform this person to be wearing the exact T-shirt shown in the reference image. Use the provided T-shirt image as the exact reference for the T-shirt design, colors, and branding - replicate it perfectly on the person. Background should be an elegant Indian tech/fintech product launch event with modern stage setup, professional lighting, elegant backdrop, and sophisticated event ambiance - NO TEXT, BANNERS, OR WRITING visible anywhere in the background. Clean, upscale launch event environment with contemporary Indian corporate event styling. Show complete full body view with the person wearing the exact branded T-shirt from the reference image in a natural, confident pose with friendly expression. 4K ultra-high resolution, photorealistic, event photography style, natural lighting. Keep the person\'s face 100% identical to original and make them wear the exact T-shirt from the reference image.',
+    requiresTshirtImage: true
   }
 ];
 
@@ -162,5 +212,34 @@ export const CATEGORY_INFO = {
     name: 'Lifestyle & Career',
     description: 'Professional careers and lifestyle portraits',
     icon: '👔'
+  },
+  arya: {
+    name: 'Arya Collection',
+    description: 'Photos with Arya, our AI mascot',
+    icon: '🤖'
   }
 };
+
+// Arya setup images for preloaded backgrounds
+export const ARYA_SETUP_IMAGES = [
+  { id: 'arya-setup-1', name: 'Office Setup', image: '/arya-photos/different-setups/arya-setup-1.jpeg' },
+  { id: 'arya-setup-2', name: 'Conference Room', image: '/arya-photos/different-setups/arya-setup-2.jpeg' },
+  { id: 'arya-setup-3', name: 'Tech Lab', image: '/arya-photos/different-setups/arya-setup-3.jpeg' },
+  { id: 'arya-setup-4', name: 'Innovation Hub', image: '/arya-photos/different-setups/arya-setup-4.jpeg' },
+  { id: 'arya-setup-5', name: 'Modern Workspace', image: '/arya-photos/different-setups/arya-setup-5.jpeg' },
+  { id: 'arya-setup-6', name: 'Event Stage', image: '/arya-photos/different-setups/arya-setup-6.jpeg' },
+  { id: 'arya-setup-7', name: 'Exhibition Hall', image: '/arya-photos/different-setups/arya-setup-7.jpeg' },
+  { id: 'arya-setup-8', name: 'Presentation Room', image: '/arya-photos/different-setups/arya-setup-8.jpeg' },
+  { id: 'arya-setup-9', name: 'Networking Area', image: '/arya-photos/different-setups/arya-setup-9.jpeg' },
+  { id: 'arya-setup-10', name: 'Demo Station', image: '/arya-photos/different-setups/arya-setup-10.jpeg' },
+  { id: 'arya-setup-11', name: 'Meeting Space', image: '/arya-photos/different-setups/arya-setup-11.jpeg' },
+  { id: 'arya-setup-12', name: 'Creative Corner', image: '/arya-photos/different-setups/arya-setup-12.jpeg' },
+  { id: 'arya-setup-13', name: 'Tech Showcase', image: '/arya-photos/different-setups/arya-setup-13.jpeg' },
+  { id: 'arya-setup-14', name: 'Innovation Center', image: '/arya-photos/different-setups/arya-setup-14.jpeg' },
+  { id: 'arya-setup-15', name: 'Digital Lounge', image: '/arya-photos/different-setups/arya-setup-15.jpeg' },
+  { id: 'arya-setup-16', name: 'AI Lab', image: '/arya-photos/different-setups/arya-setup-16.jpeg' },
+  { id: 'arya-setup-17', name: 'Future Zone', image: '/arya-photos/different-setups/arya-setup-17.jpeg' },
+  { id: 'arya-setup-18', name: 'Smart Office', image: '/arya-photos/different-setups/arya-setup-18.jpeg' },
+  { id: 'arya-setup-19', name: 'Tech Hub', image: '/arya-photos/different-setups/arya-setup-19.jpeg' },
+  { id: 'arya-setup-20', name: 'Innovation Studio', image: '/arya-photos/different-setups/arya-setup-20.jpeg' }
+];

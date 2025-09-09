@@ -116,8 +116,59 @@ const ErrorMessage = styled.div`
   border: 1px solid rgba(255, 68, 68, 0.3);
 `;
 
+const HeightInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 0 10px;
+`;
+
+const HeightLabel = styled.label`
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+`;
+
+const HeightInput = styled.input`
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 16px;
+  text-align: center;
+  width: 200px;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 77, 46, 0.1);
+  }
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 640px) {
+    width: 100%;
+    max-width: 300px;
+  }
+`;
+
+const HeightNote = styled.p`
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+  margin: 0;
+  line-height: 1.4;
+`;
+
 interface CameraCaptureProps {
-  onCapture: (imageSrc: string, imageFile: File) => void;
+  onCapture: (imageSrc: string, imageFile: File, userHeight?: string) => void;
 }
 
 const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
@@ -126,6 +177,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
   const [countdown, setCountdown] = useState(3);
   const [error, setError] = useState<string>('');
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
+  const [userHeight, setUserHeight] = useState<string>('');
 
   const capture = useCallback(() => {
     setIsCountdown(true);
@@ -165,7 +217,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
                 .then(res => res.blob())
                 .then(blob => {
                   const file = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
-                  onCapture(correctedImageSrc, file);
+                  onCapture(correctedImageSrc, file, userHeight);
                 })
                 .catch(err => {
                   console.error('Error creating file:', err);
@@ -182,7 +234,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
         setIsCountdown(false);
       }
     }, 1000);
-  }, [onCapture]);
+  }, [onCapture, userHeight]);
 
   const retake = useCallback(() => {
     setError('');
@@ -219,6 +271,22 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
           </CountdownOverlay>
         </CameraWrapper>
       </CameraContainer>
+      
+      <HeightInputContainer>
+        <HeightLabel htmlFor="height-input">
+          Your Height (optional)
+        </HeightLabel>
+        <HeightInput
+          id="height-input"
+          type="text"
+          value={userHeight}
+          onChange={(e) => setUserHeight(e.target.value)}
+          placeholder="e.g., 5'8&quot; or 170cm"
+        />
+        <HeightNote>
+          Optional: Provide your height for better proportions in AI-generated photos.
+        </HeightNote>
+      </HeightInputContainer>
       
       <ControlsContainer>
         <ActionButton primary onClick={capture} disabled={isCountdown}>

@@ -9,15 +9,28 @@ class GeminiService {
     this.genAI = new GoogleGenerativeAI(GEMINI_CONFIG.API_KEY);
   }
 
-  async transformImage(imageFile: File, transformationPrompt: string): Promise<string[]> {
+  async transformImage(imageFile: File, transformationPrompt: string, referenceImageUrl?: string, userHeight?: string): Promise<string[]> {
     console.log('Starting Gemini 2.5 Flash Image Preview transformation with prompt:', transformationPrompt);
     
     try {
       // Convert image to base64
       const imageBase64 = await this.fileToBase64(imageFile);
       
+      // Handle reference image if provided
+      let referenceImageBase64: string | null = null;
+      if (referenceImageUrl) {
+        try {
+          const response = await fetch(referenceImageUrl);
+          const blob = await response.blob();
+          const file = new File([blob], 'reference.jpg', { type: blob.type });
+          referenceImageBase64 = await this.fileToBase64(file);
+        } catch (error) {
+          console.warn('Failed to load reference image:', error);
+        }
+      }
+      
       // Create the enhanced prompt for face-preserving transformation
-      const fullPrompt = `ABSOLUTELY CRITICAL FACE-SWAP TRANSFORMATION INSTRUCTIONS:
+      let fullPrompt = `ABSOLUTELY CRITICAL FACE-SWAP TRANSFORMATION INSTRUCTIONS:
 
 🚨 MANDATORY FACE PRESERVATION RULES:
 1. You MUST use the EXACT face from the input photo - same eyes, nose, mouth, facial structure, skin tone, and ALL facial features
@@ -26,7 +39,19 @@ class GeminiService {
 4. ONLY change the clothing, accessories, background, and body pose
 5. The face must be completely recognizable as the same person from the input photo
 
-TRANSFORMATION REQUEST: ${transformationPrompt}
+TRANSFORMATION REQUEST: ${transformationPrompt}`;
+
+      // Add height information if provided
+      if (userHeight) {
+        fullPrompt += `\n\nUSER HEIGHT INFORMATION: The person in the photo is ${userHeight} tall. Use this for accurate proportions and size comparisons.`;
+      }
+
+      // Add reference image instructions if provided
+      if (referenceImageBase64) {
+        fullPrompt += `\n\nREFERENCE IMAGE PROVIDED: Use the second image as an exact reference for specific elements mentioned in the transformation (like clothing, objects, or characters). Do not modify the reference elements - use them exactly as shown.`;
+      }
+
+      fullPrompt += `
 
 TECHNICAL REQUIREMENTS:
 - Use the input image as the PRIMARY reference for all facial features
@@ -49,6 +74,29 @@ This is a face-preservation transformation - the person's identity must remain c
 
       console.log('Calling Gemini 2.5 Flash Image Preview API...');
 
+      // Prepare the parts array
+      const parts: any[] = [
+        {
+          text: fullPrompt
+        },
+        {
+          inlineData: {
+            mimeType: imageFile.type,
+            data: imageBase64
+          }
+        }
+      ];
+
+      // Add reference image if available
+      if (referenceImageBase64) {
+        parts.push({
+          inlineData: {
+            mimeType: 'image/jpeg',
+            data: referenceImageBase64
+          }
+        });
+      }
+
       // Use the correct API endpoint for image generation
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${GEMINI_CONFIG.API_KEY}`, {
         method: 'POST',
@@ -58,17 +106,7 @@ This is a face-preservation transformation - the person's identity must remain c
         body: JSON.stringify({
           contents: [
             {
-              parts: [
-                {
-                  text: fullPrompt
-                },
-                {
-                  inlineData: {
-                    mimeType: imageFile.type,
-                    data: imageBase64
-                  }
-                }
-              ]
+              parts: parts
             }
           ],
           generationConfig: {
