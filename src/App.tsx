@@ -11,15 +11,56 @@ import { Sparkles, Camera, Image as ImageIcon } from 'lucide-react';
 
 const GlobalStyle = createGlobalStyle`
   :root {
-    --primary: #ff4d2e;
-    --primary-2: #ff7a59;
-    --text: #e6e9ef;
-    --text-secondary: #b3b9c6;
-    --text-muted: var(--text-secondary);
-    --surface: rgba(255, 255, 255, 0.04);
-    --surface-2: rgba(255, 255, 255, 0.08);
-    --border: rgba(255, 255, 255, 0.12);
-    --shadow-primary: 0 10px 30px rgba(255, 77, 46, 0.25);
+    /* Piramal Brand Colors */
+    --piramal-orange: #F26841;
+    --piramal-blue: #2B4054;
+    --piramal-green: #088B4C;
+    --piramal-yellow: #FFBD07;
+    --piramal-background: #FCFCFC;
+    
+    /* Extended Color Palette */
+    --primary: var(--piramal-orange);
+    --primary-light: #F58A6A;
+    --primary-dark: #E04A1F;
+    --secondary: var(--piramal-blue);
+    --secondary-light: #3A5470;
+    --secondary-dark: #1C2B3A;
+    --accent: var(--piramal-green);
+    --accent-light: #2AA366;
+    --accent-dark: #066B39;
+    --warning: var(--piramal-yellow);
+    --warning-light: #FFD040;
+    --warning-dark: #E6A600;
+    
+    /* Neutral Colors */
+    --white: #FFFFFF;
+    --background: var(--piramal-background);
+    --background-secondary: #F8F9FA;
+    --background-tertiary: #F1F3F5;
+    --surface: rgba(255, 255, 255, 0.95);
+    --surface-elevated: rgba(255, 255, 255, 0.98);
+    --border: rgba(43, 64, 84, 0.12);
+    --border-light: rgba(43, 64, 84, 0.08);
+    
+    /* Text Colors */
+    --text-primary: var(--piramal-blue);
+    --text-secondary: #6C757D;
+    --text-muted: #ADB5BD;
+    --text-inverse: var(--white);
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(43, 64, 84, 0.08);
+    --shadow-md: 0 4px 12px rgba(43, 64, 84, 0.12);
+    --shadow-lg: 0 8px 24px rgba(43, 64, 84, 0.16);
+    --shadow-xl: 0 16px 48px rgba(43, 64, 84, 0.20);
+    --shadow-primary: 0 8px 24px rgba(242, 104, 65, 0.24);
+    --shadow-accent: 0 8px 24px rgba(8, 139, 76, 0.24);
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%);
+    --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    --gradient-surface: linear-gradient(135deg, var(--surface) 0%, var(--background) 100%);
   }
 
   * {
@@ -34,9 +75,10 @@ const GlobalStyle = createGlobalStyle`
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: radial-gradient(1200px 600px at 20% 0%, #0f172a 0%, #0b1020 60%, #060912 100%);
+    background: var(--background);
     min-height: 100vh;
-    color: var(--text);
+    color: var(--text-primary);
+    line-height: 1.6;
   }
 
   html, body {
@@ -48,59 +90,81 @@ const GlobalStyle = createGlobalStyle`
     height: auto;
     display: block;
   }
+
+  /* Professional Typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.5rem; }
+  h4 { font-size: 1.25rem; }
+  h5 { font-size: 1.125rem; }
+  h6 { font-size: 1rem; }
+
+  p {
+    margin: 0;
+    color: var(--text-secondary);
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--background-secondary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+  }
 `;
 
 const AppContainer = styled.div`
   min-height: 100vh;
   position: relative;
-  overflow: hidden;
+  background: var(--background);
 `;
 
-const BackgroundAnimation = styled.div`
+const BackgroundPattern = styled.div`
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-
-  &::before, &::after {
-    content: '';
-    position: absolute;
-    width: 60vw;
-    height: 60vw;
-    filter: blur(60px);
-    opacity: 0.25;
-    border-radius: 50%;
-  }
-
-  &::before {
-    top: -10vw;
-    left: -10vw;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 77, 46, 0.35), rgba(255, 77, 46, 0) 60%);
-  }
-
-  &::after {
-    right: -10vw;
-    bottom: -10vw;
-    background: radial-gradient(circle at 70% 70%, rgba(255, 122, 89, 0.35), rgba(255, 122, 89, 0) 60%);
-  }
+  opacity: 0.03;
+  background-image: 
+    radial-gradient(circle at 25% 25%, var(--primary) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, var(--secondary) 0%, transparent 50%);
+  background-size: 800px 800px;
+  background-position: 0 0, 400px 400px;
 `;
 
-const BrandBar = styled.nav`
+const BrandHeader = styled.header`
   position: sticky;
   top: 0;
-  z-index: 10;
-  padding: calc(env(safe-area-inset-top) + 12px) 16px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(180deg, rgba(15, 15, 35, 0.9), rgba(15, 15, 35, 0.6));
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 100;
+  background: var(--surface-elevated);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-light);
+  padding: 16px 0;
+  box-shadow: var(--shadow-sm);
 `;
 
-const BrandInner = styled.div`
-  width: 100%;
+const BrandContainer = styled.div`
   max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -109,103 +173,165 @@ const BrandInner = styled.div`
 const BrandLeft = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
 `;
 
 const LogoImg = styled.img`
-  height: 28px;
+  height: 36px;
   width: auto;
-  filter: brightness(0) invert(1);
-
+  
   @media (min-width: 768px) {
-    height: 32px;
+    height: 40px;
+  }
+`;
+
+const BrandTitle = styled.h1`
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  
+  @media (max-width: 768px) {
+    font-size: 1.25rem;
   }
 `;
 
 const BrandRight = styled.div`
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
 `;
 
+const AIBadge = styled.span`
+  background: var(--gradient-accent);
+  color: var(--white);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
 
 const MainContent = styled.main`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px 40px;
+  padding: 40px 24px;
+  
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+  }
 `;
 
 const StepIndicator = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
-  margin-bottom: 40px;
-  padding: 12px 20px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  @media (max-width: 640px) {
+  gap: 24px;
+  margin-bottom: 48px;
+  padding: 24px;
+  background: var(--surface);
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+  
+  @media (max-width: 768px) {
+    gap: 16px;
+    padding: 20px 16px;
+    margin-bottom: 32px;
+    overflow-x: auto;
     justify-content: flex-start;
-    padding: 12px 10px;
-    gap: 12px;
+    scrollbar-width: none;
+    
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 `;
 
 const Step = styled.div<{ $active: boolean; $completed: boolean }>`
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 20px;
-  border-radius: 50px;
+  gap: 12px;
+  padding: 16px 24px;
+  border-radius: 16px;
   font-weight: 600;
-  transition: all 0.3s ease;
-
-  @media (max-width: 640px) {
-    padding: 8px 14px;
-    font-size: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  position: relative;
+  
+  @media (max-width: 768px) {
+    padding: 12px 20px;
+    font-size: 0.875rem;
   }
   
   ${props => props.$completed ? `
-    background: linear-gradient(45deg, var(--primary), var(--primary-2));
-    color: #000;
+    background: var(--gradient-primary);
+    color: var(--white);
     box-shadow: var(--shadow-primary);
+    transform: translateY(-2px);
   ` : props.$active ? `
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--surface-elevated);
     border: 2px solid var(--primary);
     color: var(--primary);
-    box-shadow: 0 0 20px rgba(255, 77, 46, 0.2);
+    box-shadow: var(--shadow-md);
   ` : `
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.6);
+    background: var(--background-secondary);
+    color: var(--text-muted);
+    border: 1px solid var(--border-light);
   `}
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+  }
 `;
 
 const StepConnector = styled.div<{ $completed: boolean }>`
-  width: 40px;
-  height: 2px;
+  width: 48px;
+  height: 3px;
+  border-radius: 2px;
   background: ${props => props.$completed 
-    ? 'linear-gradient(45deg, var(--primary), var(--primary-2))' 
-    : 'rgba(255, 255, 255, 0.2)'};
+    ? 'var(--gradient-primary)' 
+    : 'var(--border)'};
   transition: all 0.3s ease;
+  
+  @media (max-width: 768px) {
+    width: 32px;
+    height: 2px;
+  }
 `;
 
 const ErrorMessage = styled.div`
-  background: rgba(255, 68, 68, 0.1);
-  border: 1px solid rgba(255, 68, 68, 0.3);
+  background: rgba(220, 53, 69, 0.1);
+  border: 1px solid rgba(220, 53, 69, 0.2);
   border-radius: 12px;
   padding: 20px;
-  margin: 20px auto;
+  margin: 24px auto;
   max-width: 600px;
   text-align: center;
-  color: #ff4444;
+  color: #dc3545;
   font-weight: 500;
+  box-shadow: var(--shadow-sm);
 `;
 
+const ContentCard = styled.div`
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-light);
+  
+  @media (max-width: 768px) {
+    padding: 24px;
+    border-radius: 20px;
+  }
+`;
 
 type AppStep = 'camera' | 'selection' | 'preview';
 
@@ -239,12 +365,12 @@ const App: React.FC = () => {
     setShowLanding(false);
   }, []);
 
-  const handlePhotoCapture = useCallback((imageSrc: string, imageFile: File, userHeight?: string) => {
+  const handlePhotoCapture = useCallback((imageSrc: string, imageFile: File) => {
     setState(prev => ({
       ...prev,
       originalImage: imageSrc,
       originalImageFile: imageFile,
-      userHeight: userHeight || null,
+      userHeight: null,
       currentStep: 'selection',
       error: null
     }));
@@ -278,7 +404,7 @@ const App: React.FC = () => {
         state.originalImageFile,
         transformation.prompt,
         referenceImageUrl,
-        state.userHeight || undefined
+        undefined
       );
 
       if (transformedImages.length > 0) {
@@ -299,7 +425,7 @@ const App: React.FC = () => {
         error: error instanceof Error ? error.message : 'Failed to transform image'
       }));
     }
-  }, [state.originalImageFile, state.userHeight]);
+  }, [state.originalImageFile]);
 
   const handleRetake = useCallback(() => {
     setState(prev => ({
@@ -363,7 +489,7 @@ const App: React.FC = () => {
         state.originalImageFile,
         transformation.prompt,
         referenceImageUrl,
-        state.userHeight || undefined
+        undefined
       );
 
       if (transformedImages.length > 0) {
@@ -384,7 +510,7 @@ const App: React.FC = () => {
         error: error instanceof Error ? error.message : 'Failed to regenerate image'
       }));
     }
-  }, [state.selectedTransformation, state.originalImageFile, state.userHeight]);
+  }, [state.selectedTransformation, state.originalImageFile]);
 
   const handleImageSelect = useCallback((index: number) => {
     setState(prev => ({
@@ -406,7 +532,7 @@ const App: React.FC = () => {
         $completed={state.originalImage !== null}
       >
         <Camera size={20} />
-        Take Photo
+        Capture Photo
       </Step>
       <StepConnector $completed={state.originalImage !== null} />
       <Step 
@@ -414,7 +540,7 @@ const App: React.FC = () => {
         $completed={state.selectedTransformation !== null}
       >
         <Sparkles size={20} />
-        Choose Style
+        Select Style
       </Step>
       <StepConnector $completed={state.selectedTransformation !== null} />
       <Step 
@@ -422,7 +548,7 @@ const App: React.FC = () => {
         $completed={state.transformedImages.length > 0}
       >
         <ImageIcon size={20} />
-        Preview & Print
+        Preview & Export
       </Step>
     </StepIndicator>
   );
@@ -430,46 +556,55 @@ const App: React.FC = () => {
   const renderCurrentStep = () => {
     switch (state.currentStep) {
       case 'camera':
-        return <CameraCapture onCapture={handlePhotoCapture} />;
+        return (
+          <ContentCard>
+            <CameraCapture onCapture={handlePhotoCapture} />
+          </ContentCard>
+        );
       
       case 'selection':
         return (
           <div>
             {state.originalImage && (
-              <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+              <div style={{ textAlign: 'center', marginBottom: '32px' }}>
                 <img 
                   src={state.originalImage} 
                   alt="Captured" 
                   style={{ 
-                    maxWidth: '200px', 
-                    borderRadius: '12px',
-                    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)' 
+                    maxWidth: '240px', 
+                    borderRadius: '16px',
+                    boxShadow: 'var(--shadow-lg)',
+                    border: '1px solid var(--border-light)'
                   }} 
                 />
               </div>
             )}
-            <TransformationOptions
-              selectedOption={state.selectedTransformation}
-              onSelect={handleTransformationSelect}
-            />
+            <ContentCard>
+              <TransformationOptions
+                selectedOption={state.selectedTransformation}
+                onSelect={handleTransformationSelect}
+              />
+            </ContentCard>
           </div>
         );
       
       case 'preview':
         return state.originalImage ? (
-          <ImagePreview
-            originalImage={state.originalImage}
-            transformedImages={state.transformedImages}
-            selectedImageIndex={state.selectedImageIndex}
-            isLoading={state.isProcessing}
-            error={state.error}
-            transformationType={getSelectedTransformationName()}
-            onRetake={handleRetake}
-            onStartOver={handleStartOver}
-            onRegenerate={handleRegenerate}
-            onTryAnotherStyle={handleTryAnotherStyle}
-            onImageSelect={handleImageSelect}
-          />
+          <ContentCard>
+            <ImagePreview
+              originalImage={state.originalImage}
+              transformedImages={state.transformedImages}
+              selectedImageIndex={state.selectedImageIndex}
+              isLoading={state.isProcessing}
+              error={state.error}
+              transformationType={getSelectedTransformationName()}
+              onRetake={handleRetake}
+              onStartOver={handleStartOver}
+              onRegenerate={handleRegenerate}
+              onTryAnotherStyle={handleTryAnotherStyle}
+              onImageSelect={handleImageSelect}
+            />
+          </ContentCard>
         ) : null;
       
       default:
@@ -491,15 +626,18 @@ const App: React.FC = () => {
     <ThemeProvider theme={{}}>
       <GlobalStyle />
       <AppContainer>
-        <BackgroundAnimation />
-        <BrandBar>
-          <BrandInner>
+        <BackgroundPattern />
+        <BrandHeader>
+          <BrandContainer>
             <BrandLeft>
               <LogoImg src="/piramal-logo.svg" alt="Piramal" />
+              <BrandTitle>AI Photo Studio</BrandTitle>
             </BrandLeft>
-            <BrandRight>AI Powered</BrandRight>
-          </BrandInner>
-        </BrandBar>
+            <BrandRight>
+              <AIBadge>AI Powered</AIBadge>
+            </BrandRight>
+          </BrandContainer>
+        </BrandHeader>
         
         <MainContent>
           {renderStepIndicator()}

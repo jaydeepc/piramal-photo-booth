@@ -1,59 +1,106 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { Download, Printer, RotateCcw, Loader, RefreshCw, Sparkles } from 'lucide-react';
+import { Download, Printer, RotateCcw, Loader, RefreshCw, Sparkles, ArrowLeft, Share2, Heart } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
 
-const PreviewContainer = styled.div`
-  max-width: 1000px;
+const PreviewSection = styled.div`
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
 `;
 
-
-const OriginalImageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-`;
-
-const TransformedImagesContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  margin-bottom: 30px;
-
+const SectionHeader = styled.div`
+  text-align: center;
+  margin-bottom: 48px;
+  
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    margin-bottom: 32px;
   }
 `;
 
-const ImageCard = styled.div`
-  position: relative;
-  background: var(--surface);
-  border: 2px solid var(--surface-2);
-  border-radius: 16px;
-  padding: 20px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+const SectionTitle = styled.h2`
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0 0 16px 0;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  
+  @media (max-width: 768px) {
+    font-size: 2rem;
+    margin-bottom: 12px;
+  }
 `;
 
-const ImageTitle = styled.h3`
-  color: var(--text);
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0 0 15px 0;
+const SectionSubtitle = styled.p`
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+  
+  @media (max-width: 768px) {
+    font-size: 1.125rem;
+  }
+`;
+
+const ContentGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 48px;
+  margin-bottom: 48px;
+  
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-bottom: 32px;
+  }
+`;
+
+const OriginalSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const OriginalCard = styled.div`
+  background: var(--surface-elevated);
+  border-radius: 24px;
+  padding: 24px;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-md);
+  width: 100%;
+  max-width: 300px;
+  
+  @media (max-width: 768px) {
+    border-radius: 20px;
+    padding: 20px;
+  }
+`;
+
+const CardTitle = styled.h3`
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 16px 0;
   text-align: center;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  
+  @media (max-width: 768px) {
+    font-size: 1.125rem;
+    margin-bottom: 12px;
+  }
 `;
 
 const ImageWrapper = styled.div`
   position: relative;
   width: 100%;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  background: #000;
+  background: var(--background-secondary);
   aspect-ratio: 3/4;
+  
+  @media (max-width: 768px) {
+    border-radius: 14px;
+  }
 `;
 
 const Image = styled.img`
@@ -63,25 +110,124 @@ const Image = styled.img`
   display: block;
 `;
 
+const TransformedSection = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const TransformedGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+`;
+
+const TransformedCard = styled.div<{ $selected: boolean }>`
+  background: var(--surface-elevated);
+  border: 3px solid ${props => props.$selected ? 'var(--primary)' : 'var(--border-light)'};
+  border-radius: 24px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    transform: scaleX(${props => props.$selected ? 1 : 0});
+    transition: transform 0.3s ease;
+  }
+  
+  @media (max-width: 768px) {
+    border-radius: 20px;
+    padding: 16px;
+  }
+  
+  &:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+    
+    &::before {
+      transform: scaleX(1);
+    }
+  }
+
+  ${props => props.$selected && `
+    background: rgba(242, 104, 65, 0.05);
+    box-shadow: var(--shadow-primary);
+    transform: translateY(-2px);
+  `}
+`;
+
+const VariationTitle = styled.h4`
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+`;
+
+const SelectedBadge = styled.span`
+  background: var(--gradient-primary);
+  color: var(--white);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
+
+const LoadingCard = styled.div`
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: 24px;
+  padding: 20px;
+  
+  @media (max-width: 768px) {
+    border-radius: 20px;
+    padding: 16px;
+  }
+`;
+
 const LoadingOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background: var(--background-secondary);
+  border-radius: 16px;
+  aspect-ratio: 3/4;
   color: var(--primary);
-  font-size: 16px;
-  font-weight: 600;
+  
+  @media (max-width: 768px) {
+    border-radius: 14px;
+  }
 `;
 
 const LoadingSpinner = styled(Loader)`
   animation: spin 2s linear infinite;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 
   @keyframes spin {
     from { transform: rotate(0deg); }
@@ -89,63 +235,154 @@ const LoadingSpinner = styled(Loader)`
   }
 `;
 
-const ControlsContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  padding: 0 10px;
+const LoadingText = styled.p`
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
+  }
 `;
 
-const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' | 'danger' }>`
+const SelectionIndicator = styled.div`
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
+  justify-content: center;
+  color: var(--white);
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: var(--shadow-primary);
+  
+  @media (max-width: 768px) {
+    top: 12px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    font-size: 0.875rem;
+  }
+`;
+
+const ActionSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+`;
+
+const PrimaryActions = styled.div`
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  
+  @media (max-width: 768px) {
+    gap: 12px;
+  }
+`;
+
+const SecondaryActions = styled.div`
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  
+  @media (max-width: 768px) {
+    gap: 10px;
+  }
+`;
+
+const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' | 'danger' | 'success' }>`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
   border: none;
-  border-radius: 50px;
-  font-size: 16px;
+  border-radius: 16px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
 
-  @media (max-width: 640px) {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
     width: 100%;
-    justify-content: center;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  &:hover::before {
+    left: 100%;
+  }
+
+  @media (max-width: 768px) {
+    padding: 14px 24px;
+    font-size: 0.875rem;
+    border-radius: 14px;
   }
   
   ${props => {
     switch (props.variant) {
       case 'primary':
         return `
-          background: linear-gradient(45deg, var(--primary), var(--primary-2));
-          color: #000;
+          background: var(--gradient-primary);
+          color: var(--white);
           box-shadow: var(--shadow-primary);
           
           &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(255, 77, 46, 0.35);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
+          }
+        `;
+      case 'success':
+        return `
+          background: var(--gradient-accent);
+          color: var(--white);
+          box-shadow: var(--shadow-accent);
+          
+          &:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
           }
         `;
       case 'danger':
         return `
-          background: linear-gradient(45deg, #ff4444, #ff6b6b);
-          color: #fff;
-          box-shadow: 0 8px 20px rgba(255, 68, 68, 0.3);
+          background: linear-gradient(135deg, #dc3545, #c82333);
+          color: var(--white);
+          box-shadow: 0 8px 24px rgba(220, 53, 69, 0.24);
           
           &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(255, 68, 68, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 16px 48px rgba(220, 53, 69, 0.32);
           }
         `;
       default:
         return `
-          background: var(--surface);
-          color: var(--text);
+          background: var(--surface-elevated);
+          color: var(--text-primary);
           border: 1px solid var(--border);
+          box-shadow: var(--shadow-sm);
           
           &:hover {
-            background: var(--surface-2);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            background: var(--white);
           }
         `;
     }
@@ -153,6 +390,30 @@ const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' | 'danger
 
   &:active {
     transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+`;
+
+const ErrorMessage = styled.div`
+  background: rgba(220, 53, 69, 0.1);
+  border: 1px solid rgba(220, 53, 69, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 24px 0;
+  text-align: center;
+  color: #dc3545;
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+  
+  @media (max-width: 768px) {
+    padding: 20px;
+    border-radius: 14px;
+    margin: 20px 0;
   }
 `;
 
@@ -174,9 +435,10 @@ const PrintableContent = styled.div`
 
 const PrintTitle = styled.h2`
   text-align: center;
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 20px;
-  font-size: 24px;
+  font-size: 1.5rem;
+  font-weight: 700;
   
   @media screen {
     display: none;
@@ -207,18 +469,30 @@ const PrintImageWrapper = styled.div`
 const PrintImage = styled.img`
   max-width: 300px;
   max-height: 400px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
 `;
 
-const ErrorMessage = styled.div`
-  color: #ff4444;
-  text-align: center;
-  margin: 20px 0;
-  padding: 15px;
-  background: rgba(255, 68, 68, 0.1);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 68, 68, 0.3);
+const QualityBadge = styled.div`
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: var(--gradient-accent);
+  color: var(--white);
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: var(--shadow-accent);
+  
+  @media (max-width: 768px) {
+    top: 12px;
+    left: 12px;
+    padding: 4px 10px;
+    font-size: 0.7rem;
+  }
 `;
 
 interface ImagePreviewProps {
@@ -255,7 +529,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
-    documentTitle: `Photo Booth - ${transformationType} Transformation`
+    documentTitle: `Piramal AI Photo Studio - ${transformationType}`
   });
 
   const handleDownload = async () => {
@@ -274,7 +548,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
         // Create download link
         const link = document.createElement('a');
         link.href = blobUrl;
-        link.download = `photo-booth-${transformationType.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.png`;
+        link.download = `piramal-ai-photo-${transformationType.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.png`;
         
         // For mobile compatibility
         link.setAttribute('target', '_blank');
@@ -290,7 +564,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
         // Fallback to original method
         const link = document.createElement('a');
         link.href = currentTransformedImage;
-        link.download = `photo-booth-${transformationType.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.png`;
+        link.download = `piramal-ai-photo-${transformationType.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.png`;
         link.setAttribute('target', '_blank');
         document.body.appendChild(link);
         link.click();
@@ -300,151 +574,137 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
   };
 
   return (
-    <PreviewContainer>
-      {/* Original Image */}
-      <OriginalImageContainer>
-        <ImageCard style={{ maxWidth: '300px' }}>
-          <ImageTitle>Original Photo</ImageTitle>
-          <ImageWrapper>
-            <Image src={originalImage} alt="Original" />
-          </ImageWrapper>
-        </ImageCard>
-      </OriginalImageContainer>
+    <PreviewSection>
+      <SectionHeader>
+        <SectionTitle>{transformationType}</SectionTitle>
+        <SectionSubtitle>
+          Your AI-transformed photos are ready! Choose your favorite and download or print.
+        </SectionSubtitle>
+      </SectionHeader>
 
-      {/* Transformed Images */}
-      <div>
-        <ImageTitle style={{ textAlign: 'center', marginBottom: '20px', fontSize: '24px' }}>
-          {transformationType} Transformations - Choose Your Favorite
-        </ImageTitle>
-        
-        <TransformedImagesContainer>
-          {isLoading && transformedImages.length === 0 && (
-            <>
-              {/* Show loading placeholders for both variations */}
-              <ImageCard>
-                <ImageTitle>Variation 1</ImageTitle>
-                <ImageWrapper>
+      <ContentGrid>
+        {/* Original Image */}
+        <OriginalSection>
+          <OriginalCard>
+            <CardTitle>Original Photo</CardTitle>
+            <ImageWrapper>
+              <Image src={originalImage} alt="Original" />
+              <QualityBadge>Original</QualityBadge>
+            </ImageWrapper>
+          </OriginalCard>
+        </OriginalSection>
+
+        {/* Transformed Images */}
+        <TransformedSection>
+          <TransformedGrid>
+            {isLoading && transformedImages.length === 0 && (
+              <>
+                {/* Show loading placeholders for both variations */}
+                <LoadingCard>
+                  <VariationTitle>Variation 1</VariationTitle>
                   <LoadingOverlay>
                     <LoadingSpinner size={48} />
-                    Generating variation 1...
+                    <LoadingText>Generating your first variation...</LoadingText>
                   </LoadingOverlay>
-                </ImageWrapper>
-              </ImageCard>
-              <ImageCard>
-                <ImageTitle>Variation 2</ImageTitle>
-                <ImageWrapper>
+                </LoadingCard>
+                <LoadingCard>
+                  <VariationTitle>Variation 2</VariationTitle>
                   <LoadingOverlay>
                     <LoadingSpinner size={48} />
-                    Generating variation 2...
+                    <LoadingText>Generating your second variation...</LoadingText>
                   </LoadingOverlay>
+                </LoadingCard>
+              </>
+            )}
+            
+            {transformedImages.map((imageUrl, index) => (
+              <TransformedCard 
+                key={index}
+                $selected={selectedImageIndex === index}
+                onClick={() => onImageSelect && onImageSelect(index)}
+              >
+                <VariationTitle>
+                  Variation {index + 1}
+                  {selectedImageIndex === index && <SelectedBadge>Selected</SelectedBadge>}
+                </VariationTitle>
+                <ImageWrapper>
+                  <Image src={imageUrl} alt={`Transformed variation ${index + 1}`} />
+                  <QualityBadge>AI Enhanced</QualityBadge>
+                  {selectedImageIndex === index && (
+                    <SelectionIndicator>
+                      <Heart size={16} fill="currentColor" />
+                    </SelectionIndicator>
+                  )}
                 </ImageWrapper>
-              </ImageCard>
-            </>
-          )}
-          
-          {transformedImages.map((imageUrl, index) => (
-            <ImageCard 
-              key={index}
-              style={{ 
-                cursor: 'pointer',
-                border: selectedImageIndex === index ? '3px solid var(--primary)' : '2px solid var(--surface-2)',
-                transform: selectedImageIndex === index ? 'scale(1.02)' : 'scale(1)',
-                transition: 'all 0.3s ease'
-              }}
-              onClick={() => onImageSelect && onImageSelect(index)}
-            >
-              <ImageTitle>
-                Variation {index + 1}
-                {selectedImageIndex === index && ' ✓ Selected'}
-              </ImageTitle>
-              <ImageWrapper>
-                <Image src={imageUrl} alt={`Transformed variation ${index + 1}`} />
-                {selectedImageIndex === index && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
-                    background: 'var(--primary)',
-                    color: '#000',
-                    borderRadius: '50%',
-                    width: '30px',
-                    height: '30px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 'bold',
-                    fontSize: '18px'
-                  }}>
-                    ✓
-                  </div>
-                )}
-              </ImageWrapper>
-            </ImageCard>
-          ))}
-          
-          {/* Show loading for remaining variations if still generating */}
-          {isLoading && transformedImages.length > 0 && transformedImages.length < 2 && (
-            <ImageCard>
-              <ImageTitle>Variation {transformedImages.length + 1}</ImageTitle>
-              <ImageWrapper>
+              </TransformedCard>
+            ))}
+            
+            {/* Show loading for remaining variations if still generating */}
+            {isLoading && transformedImages.length > 0 && transformedImages.length < 2 && (
+              <LoadingCard>
+                <VariationTitle>Variation {transformedImages.length + 1}</VariationTitle>
                 <LoadingOverlay>
                   <LoadingSpinner size={48} />
-                  Generating variation {transformedImages.length + 1}...
+                  <LoadingText>Generating variation {transformedImages.length + 1}...</LoadingText>
                 </LoadingOverlay>
-              </ImageWrapper>
-            </ImageCard>
-          )}
-        </TransformedImagesContainer>
-      </div>
+              </LoadingCard>
+            )}
+          </TransformedGrid>
+        </TransformedSection>
+      </ContentGrid>
 
       {error && <ErrorMessage>{error}</ErrorMessage>}
 
-      <ControlsContainer>
+      <ActionSection>
         {currentTransformedImage && (
-          <>
-            <ActionButton variant="primary" onClick={handlePrint}>
+          <PrimaryActions>
+            <ActionButton variant="primary" onClick={handleDownload}>
+              <Download size={20} />
+              Download Photo
+            </ActionButton>
+            <ActionButton variant="success" onClick={handlePrint}>
               <Printer size={20} />
               Print Photo
-            </ActionButton>
-            <ActionButton onClick={handleDownload}>
-              <Download size={20} />
-              Download
             </ActionButton>
             <ActionButton onClick={onRegenerate} disabled={isLoading}>
               <RefreshCw size={20} />
               Regenerate
             </ActionButton>
-          </>
+          </PrimaryActions>
         )}
-        {onTryAnotherStyle && (
-          <ActionButton onClick={onTryAnotherStyle}>
-            <Sparkles size={20} />
-            Try Another Style
+        
+        <SecondaryActions>
+          {onTryAnotherStyle && (
+            <ActionButton onClick={onTryAnotherStyle}>
+              <Sparkles size={20} />
+              Try Another Style
+            </ActionButton>
+          )}
+          <ActionButton onClick={onRetake}>
+            <ArrowLeft size={20} />
+            Retake Photo
           </ActionButton>
-        )}
-        <ActionButton onClick={onRetake}>
-          <RotateCcw size={20} />
-          Retake Photo
-        </ActionButton>
-        <ActionButton variant="danger" onClick={onStartOver}>
-          Start Over
-        </ActionButton>
-      </ControlsContainer>
+          <ActionButton variant="danger" onClick={onStartOver}>
+            <RotateCcw size={20} />
+            Start Over
+          </ActionButton>
+        </SecondaryActions>
+      </ActionSection>
 
       {/* Hidden printable content */}
       <div style={{ display: 'none' }}>
         <PrintableContent ref={printRef}>
-          <PrintTitle>AI Photo Booth - {transformationType} Transformation</PrintTitle>
+          <PrintTitle>Piramal AI Photo Studio - {transformationType}</PrintTitle>
           <PrintImagesContainer>
             {currentTransformedImage && (
               <PrintImageWrapper>
-                <PrintImage src={currentTransformedImage} alt="Transformed" />
+                <PrintImage src={currentTransformedImage} alt="AI Transformed" />
               </PrintImageWrapper>
             )}
           </PrintImagesContainer>
         </PrintableContent>
       </div>
-    </PreviewContainer>
+    </PreviewSection>
   );
 };
 

@@ -3,28 +3,82 @@ import Webcam from 'react-webcam';
 import styled from 'styled-components';
 import { Camera, RotateCcw, SwitchCamera } from 'lucide-react';
 
+const CameraSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  max-width: 600px;
+  margin: 0 auto;
+`;
+
+const SectionTitle = styled.h2`
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 8px 0;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  
+  @media (max-width: 768px) {
+    font-size: 1.75rem;
+  }
+`;
+
+const SectionSubtitle = styled.p`
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+  margin: 0 0 32px 0;
+  line-height: 1.5;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin-bottom: 24px;
+  }
+`;
+
 const CameraContainer = styled.div`
   position: relative;
   width: 100%;
-  max-width: 480px;
+  max-width: 400px;
   margin: 0 auto;
-  border-radius: 20px;
+  border-radius: 24px;
   overflow: hidden;
-  background: linear-gradient(45deg, var(--primary), var(--primary-2));
+  background: var(--gradient-primary);
   padding: 4px;
   box-shadow: var(--shadow-primary);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+  }
+  
+  @media (max-width: 768px) {
+    max-width: 320px;
+    border-radius: 20px;
+  }
 `;
 
 const CameraWrapper = styled.div`
   position: relative;
-  background: #000;
-  border-radius: 16px;
+  background: var(--secondary-dark);
+  border-radius: 20px;
   overflow: hidden;
+  aspect-ratio: 3/4;
+  
+  @media (max-width: 768px) {
+    border-radius: 16px;
+  }
 `;
 
 const StyledWebcam = styled(Webcam)`
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
   transform: scaleX(-1);
 `;
@@ -35,135 +89,188 @@ const CountdownOverlay = styled.div<{ $show: boolean }>`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(43, 64, 84, 0.95);
   display: ${props => props.$show ? 'flex' : 'none'};
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 10;
+  backdrop-filter: blur(10px);
 `;
 
 const CountdownText = styled.div`
   font-size: 4rem;
-  font-weight: bold;
+  font-weight: 800;
   color: var(--primary);
-  text-shadow: 0 0 20px var(--primary);
+  text-shadow: 0 0 30px var(--primary);
   animation: pulse 1s ease-in-out;
+  margin-bottom: 16px;
 
   @keyframes pulse {
     0% { transform: scale(0.8); opacity: 0.5; }
     50% { transform: scale(1.2); opacity: 1; }
     100% { transform: scale(1); opacity: 0.8; }
   }
+  
+  @media (max-width: 768px) {
+    font-size: 3rem;
+  }
 `;
+
+const CountdownMessage = styled.p`
+  color: var(--white);
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+`;
+
 
 const ControlsContainer = styled.div`
   display: flex;
   justify-content: center;
   gap: 16px;
-  margin-top: 20px;
-  padding: 0 10px;
   flex-wrap: wrap;
+  width: 100%;
+  
+  @media (max-width: 768px) {
+    gap: 12px;
+  }
 `;
 
-const ActionButton = styled.button<{ primary?: boolean }>`
+const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
+  gap: 10px;
+  padding: 16px 24px;
   border: none;
-  border-radius: 50px;
-  font-size: 16px;
+  border-radius: 16px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
 
-  @media (max-width: 640px) {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
     width: 100%;
-    justify-content: center;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  &:hover::before {
+    left: 100%;
+  }
+
+  @media (max-width: 768px) {
+    padding: 14px 20px;
+    font-size: 0.875rem;
+    border-radius: 14px;
   }
   
-  ${props => props.primary ? `
-    background: linear-gradient(45deg, var(--primary), var(--primary-2));
-    color: #000;
+  ${props => props.variant === 'primary' ? `
+    background: var(--gradient-primary);
+    color: var(--white);
     box-shadow: var(--shadow-primary);
     
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 25px rgba(255, 77, 46, 0.35);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-xl);
+    }
+    
+    &:active {
+      transform: translateY(-1px);
     }
   ` : `
-    background: var(--surface);
-    color: var(--text);
+    background: var(--surface-elevated);
+    color: var(--text-primary);
     border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
     
     &:hover {
-      background: var(--surface-2);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      background: var(--white);
+    }
+    
+    &:active {
+      transform: translateY(0);
     }
   `}
 
-  &:active {
-    transform: translateY(0);
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
   }
 `;
 
 const ErrorMessage = styled.div`
-  color: #ff4444;
+  background: rgba(220, 53, 69, 0.1);
+  border: 1px solid rgba(220, 53, 69, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 24px;
   text-align: center;
-  margin-top: 10px;
-  padding: 10px;
-  background: rgba(255, 68, 68, 0.1);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 68, 68, 0.3);
+  color: #dc3545;
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+    border-radius: 14px;
+    margin-top: 20px;
+  }
 `;
 
-const HeightInputContainer = styled.div`
+const CameraPlaceholder = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  margin-top: 20px;
-  padding: 0 10px;
-`;
-
-const HeightLabel = styled.label`
-  color: var(--text);
-  font-size: 14px;
-  font-weight: 500;
-  text-align: center;
-`;
-
-const HeightInput = styled.input`
-  padding: 12px 16px;
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  background: var(--surface);
-  color: var(--text);
-  font-size: 16px;
-  text-align: center;
-  width: 200px;
-  transition: all 0.3s ease;
-
-  &:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(255, 77, 46, 0.1);
-  }
-
-  &::placeholder {
-    color: var(--text-muted);
-  }
-
-  @media (max-width: 640px) {
-    width: 100%;
-    max-width: 300px;
-  }
-`;
-
-const HeightNote = styled.p`
+  justify-content: center;
+  background: var(--background-secondary);
   color: var(--text-muted);
-  font-size: 12px;
   text-align: center;
+  padding: 40px 20px;
+`;
+
+const PlaceholderIcon = styled.div`
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: var(--gradient-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-md);
+`;
+
+const PlaceholderText = styled.p`
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: var(--text-primary);
+`;
+
+const PlaceholderSubtext = styled.p`
+  font-size: 0.875rem;
   margin: 0;
+  color: var(--text-muted);
   line-height: 1.4;
 `;
 
@@ -177,7 +284,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
   const [countdown, setCountdown] = useState(3);
   const [error, setError] = useState<string>('');
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
-  const [userHeight, setUserHeight] = useState<string>('');
+  const [cameraReady, setCameraReady] = useState(false);
 
   const capture = useCallback(() => {
     setIsCountdown(true);
@@ -217,7 +324,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
                 .then(res => res.blob())
                 .then(blob => {
                   const file = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
-                  onCapture(correctedImageSrc, file, userHeight);
+                  onCapture(correctedImageSrc, file);
                 })
                 .catch(err => {
                   console.error('Error creating file:', err);
@@ -234,19 +341,39 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
         setIsCountdown(false);
       }
     }, 1000);
-  }, [onCapture, userHeight]);
+  }, [onCapture]);
 
   const retake = useCallback(() => {
     setError('');
+    setCameraReady(false);
   }, []);
 
   const switchCamera = useCallback(() => {
     setFacingMode(prev => prev === 'user' ? 'environment' : 'user');
     setError('');
+    setCameraReady(false);
+  }, []);
+
+  const handleUserMedia = useCallback(() => {
+    setCameraReady(true);
+    setError('');
+  }, []);
+
+  const handleUserMediaError = useCallback((error: any) => {
+    console.error('Camera error:', error);
+    setError('Camera access denied. Please allow camera permissions and refresh the page.');
+    setCameraReady(false);
   }, []);
 
   return (
-    <div>
+    <CameraSection>
+      <div>
+        <SectionTitle>Capture Your Photo</SectionTitle>
+        <SectionSubtitle>
+          Position yourself in the frame and click capture when ready
+        </SectionSubtitle>
+      </div>
+
       <CameraContainer>
         <CameraWrapper>
           <StyledWebcam
@@ -259,52 +386,62 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture }) => {
               height: 640,
               facingMode: facingMode
             }}
-            onUserMediaError={(error) => {
-              console.error('Camera error:', error);
-              setError('Camera access denied. Please allow camera permissions and refresh the page.');
-            }}
+            onUserMedia={handleUserMedia}
+            onUserMediaError={handleUserMediaError}
           />
+          {!cameraReady && (
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'var(--background-secondary)',
+              borderRadius: '20px'
+            }}>
+              <CameraPlaceholder>
+                <PlaceholderIcon>
+                  <Camera size={40} />
+                </PlaceholderIcon>
+                <PlaceholderText>Camera Loading...</PlaceholderText>
+                <PlaceholderSubtext>
+                  Please allow camera access when prompted
+                </PlaceholderSubtext>
+              </CameraPlaceholder>
+            </div>
+          )}
           <CountdownOverlay $show={isCountdown}>
             <CountdownText>
               {countdown > 0 ? countdown : '📸'}
             </CountdownText>
+            <CountdownMessage>
+              {countdown > 0 ? 'Get ready...' : 'Perfect!'}
+            </CountdownMessage>
           </CountdownOverlay>
         </CameraWrapper>
       </CameraContainer>
       
-      <HeightInputContainer>
-        <HeightLabel htmlFor="height-input">
-          Your Height (optional)
-        </HeightLabel>
-        <HeightInput
-          id="height-input"
-          type="text"
-          value={userHeight}
-          onChange={(e) => setUserHeight(e.target.value)}
-          placeholder="e.g., 5'8&quot; or 170cm"
-        />
-        <HeightNote>
-          Optional: Provide your height for better proportions in AI-generated photos.
-        </HeightNote>
-      </HeightInputContainer>
       
       <ControlsContainer>
-        <ActionButton primary onClick={capture} disabled={isCountdown}>
+        <ActionButton variant="primary" onClick={capture} disabled={isCountdown || !cameraReady}>
           <Camera size={20} />
-          Take Photo
+          Capture Photo
         </ActionButton>
-        <ActionButton onClick={switchCamera}>
+        <ActionButton onClick={switchCamera} disabled={isCountdown}>
           <SwitchCamera size={20} />
           Switch Camera
         </ActionButton>
-        <ActionButton onClick={retake}>
+        <ActionButton onClick={retake} disabled={isCountdown}>
           <RotateCcw size={20} />
           Reset
         </ActionButton>
       </ControlsContainer>
       
       {error && <ErrorMessage>{error}</ErrorMessage>}
-    </div>
+    </CameraSection>
   );
 };
 
