@@ -214,7 +214,8 @@ interface AppState {
   originalImage: string | null;
   originalImageFile: File | null;
   selectedTransformation: string | null;
-  transformedImage: string | null;
+  transformedImages: string[];
+  selectedImageIndex: number;
   isProcessing: boolean;
   error: string | null;
   userHeight: string | null;
@@ -227,7 +228,8 @@ const App: React.FC = () => {
     originalImage: null,
     originalImageFile: null,
     selectedTransformation: null,
-    transformedImage: null,
+    transformedImages: [],
+    selectedImageIndex: 0,
     isProcessing: false,
     error: null,
     userHeight: null
@@ -252,14 +254,15 @@ const App: React.FC = () => {
     const transformation = TRANSFORMATION_OPTIONS.find(opt => opt.id === transformationId);
     if (!transformation || !state.originalImageFile) return;
 
-    setState(prev => ({
-      ...prev,
-      selectedTransformation: transformationId,
-      currentStep: 'preview',
-      isProcessing: true,
-      error: null,
-      transformedImage: null
-    }));
+      setState(prev => ({
+        ...prev,
+        selectedTransformation: transformationId,
+        currentStep: 'preview',
+        isProcessing: true,
+        error: null,
+        transformedImages: [],
+        selectedImageIndex: 0
+      }));
 
     try {
       // Determine reference image URL based on transformation type
@@ -281,7 +284,8 @@ const App: React.FC = () => {
       if (transformedImages.length > 0) {
         setState(prev => ({
           ...prev,
-          transformedImage: transformedImages[0],
+          transformedImages: transformedImages,
+          selectedImageIndex: 0,
           isProcessing: false
         }));
       } else {
@@ -310,7 +314,8 @@ const App: React.FC = () => {
       ...prev,
       currentStep: 'selection',
       selectedTransformation: null,
-      transformedImage: null,
+      transformedImages: [],
+      selectedImageIndex: 0,
       isProcessing: false,
       error: null
     }));
@@ -322,7 +327,8 @@ const App: React.FC = () => {
       originalImage: null,
       originalImageFile: null,
       selectedTransformation: null,
-      transformedImage: null,
+      transformedImages: [],
+      selectedImageIndex: 0,
       isProcessing: false,
       error: null,
       userHeight: null
@@ -339,7 +345,8 @@ const App: React.FC = () => {
       ...prev,
       isProcessing: true,
       error: null,
-      transformedImage: null
+      transformedImages: [],
+      selectedImageIndex: 0
     }));
 
     try {
@@ -362,7 +369,8 @@ const App: React.FC = () => {
       if (transformedImages.length > 0) {
         setState(prev => ({
           ...prev,
-          transformedImage: transformedImages[0],
+          transformedImages: transformedImages,
+          selectedImageIndex: 0,
           isProcessing: false
         }));
       } else {
@@ -377,6 +385,13 @@ const App: React.FC = () => {
       }));
     }
   }, [state.selectedTransformation, state.originalImageFile, state.userHeight]);
+
+  const handleImageSelect = useCallback((index: number) => {
+    setState(prev => ({
+      ...prev,
+      selectedImageIndex: index
+    }));
+  }, []);
 
   const getSelectedTransformationName = () => {
     if (!state.selectedTransformation) return '';
@@ -404,7 +419,7 @@ const App: React.FC = () => {
       <StepConnector $completed={state.selectedTransformation !== null} />
       <Step 
         $active={state.currentStep === 'preview'} 
-        $completed={state.transformedImage !== null}
+        $completed={state.transformedImages.length > 0}
       >
         <ImageIcon size={20} />
         Preview & Print
@@ -444,7 +459,8 @@ const App: React.FC = () => {
         return state.originalImage ? (
           <ImagePreview
             originalImage={state.originalImage}
-            transformedImage={state.transformedImage}
+            transformedImages={state.transformedImages}
+            selectedImageIndex={state.selectedImageIndex}
             isLoading={state.isProcessing}
             error={state.error}
             transformationType={getSelectedTransformationName()}
@@ -452,6 +468,7 @@ const App: React.FC = () => {
             onStartOver={handleStartOver}
             onRegenerate={handleRegenerate}
             onTryAnotherStyle={handleTryAnotherStyle}
+            onImageSelect={handleImageSelect}
           />
         ) : null;
       

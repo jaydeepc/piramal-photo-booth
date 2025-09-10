@@ -11,7 +11,46 @@ class GeminiService {
 
   async transformImage(imageFile: File, transformationPrompt: string, referenceImageUrl?: string, userHeight?: string): Promise<string[]> {
     console.log('Starting Gemini 2.5 Flash Image Preview transformation with prompt:', transformationPrompt);
+    console.log('Generating 2 variations for better character consistency...');
     
+    try {
+      // Generate two variations by making two separate API calls
+      const generatedImages: string[] = [];
+      
+      // Make first API call
+      console.log('Generating variation 1...');
+      const firstVariation = await this.generateSingleImage(imageFile, transformationPrompt, referenceImageUrl, userHeight, 1);
+      if (firstVariation) {
+        generatedImages.push(firstVariation);
+      }
+      
+      // Make second API call with slight variation in prompt to encourage diversity
+      console.log('Generating variation 2...');
+      const secondVariation = await this.generateSingleImage(imageFile, transformationPrompt, referenceImageUrl, userHeight, 2);
+      if (secondVariation) {
+        generatedImages.push(secondVariation);
+      }
+      
+      // If we don't have at least 2 images, create fallback options
+      if (generatedImages.length === 0) {
+        console.log('No images generated, creating fallback visualizations...');
+        return this.createFallbackVisualization(transformationPrompt, null);
+      } else if (generatedImages.length === 1) {
+        console.log('Only one image generated, creating additional fallback option...');
+        const fallbackImages = await this.createFallbackVisualization(transformationPrompt, null);
+        generatedImages.push(...fallbackImages);
+      }
+
+      console.log(`Successfully generated ${generatedImages.length} image variations`);
+      return generatedImages;
+
+    } catch (error) {
+      console.error('Error in Gemini transformation process:', error);
+      throw new Error(`Failed to transform image with Gemini AI: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  private async generateSingleImage(imageFile: File, transformationPrompt: string, referenceImageUrl?: string, userHeight?: string, variationNumber: number = 1): Promise<string | null> {
     try {
       // Convert image to base64
       const imageBase64 = await this.fileToBase64(imageFile);
@@ -40,6 +79,11 @@ class GeminiService {
 5. The face must be completely recognizable as the same person from the input photo
 
 TRANSFORMATION REQUEST: ${transformationPrompt}`;
+
+      // Add slight variation for different versions to encourage diversity
+      if (variationNumber === 2) {
+        fullPrompt += `\n\nVARIATION NOTE: Create a slightly different interpretation of this transformation while maintaining the same core concept and face preservation rules.`;
+      }
 
       // Add height information if provided
       if (userHeight) {
@@ -71,8 +115,6 @@ VERIFICATION CHECKLIST:
 ✓ Only clothing/accessories/background changed
 
 This is a face-preservation transformation - the person's identity must remain completely intact.`;
-
-      console.log('Calling Gemini 2.5 Flash Image Preview API...');
 
       // Prepare the parts array
       const parts: any[] = [
@@ -118,14 +160,12 @@ This is a face-preservation transformation - the person's identity must remain c
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Gemini API error:', errorData);
+        console.error(`Gemini API error for variation ${variationNumber}:`, errorData);
         throw new Error(`Gemini API failed: ${errorData.error?.message || 'Unknown error'}`);
       }
 
       const data = await response.json();
-      console.log('Gemini API response:', data);
-
-      const generatedImages: string[] = [];
+      console.log(`Gemini API response for variation ${variationNumber}:`, data);
 
       if (data.candidates && data.candidates.length > 0) {
         const candidate = data.candidates[0];
@@ -143,24 +183,19 @@ This is a face-preservation transformation - the person's identity must remain c
               
               const blob = new Blob([bytes], { type: part.inlineData.mimeType || 'image/png' });
               const imageUrl = URL.createObjectURL(blob);
-              generatedImages.push(imageUrl);
-              console.log('Generated image URL:', imageUrl);
+              console.log(`Generated image URL for variation ${variationNumber}:`, imageUrl);
+              return imageUrl;
             }
           }
         }
       }
 
-      if (generatedImages.length === 0) {
-        console.log('No images generated, creating fallback visualization...');
-        // Fallback: create a text-based visualization
-        return this.createFallbackVisualization(transformationPrompt, data);
-      }
-
-      return generatedImages;
+      console.warn(`No image generated for variation ${variationNumber}`);
+      return null;
 
     } catch (error) {
-      console.error('Error in Gemini transformation process:', error);
-      throw new Error(`Failed to transform image with Gemini AI: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error(`Error generating variation ${variationNumber}:`, error);
+      return null;
     }
   }
 

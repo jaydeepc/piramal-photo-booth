@@ -9,9 +9,16 @@ const PreviewContainer = styled.div`
   padding: 20px;
 `;
 
-const ImagesContainer = styled.div`
+
+const OriginalImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+`;
+
+const TransformedImagesContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
   margin-bottom: 30px;
 
@@ -216,7 +223,8 @@ const ErrorMessage = styled.div`
 
 interface ImagePreviewProps {
   originalImage: string;
-  transformedImage: string | null;
+  transformedImages: string[];
+  selectedImageIndex: number;
   isLoading: boolean;
   error: string | null;
   transformationType: string;
@@ -224,20 +232,26 @@ interface ImagePreviewProps {
   onStartOver: () => void;
   onRegenerate: () => void;
   onTryAnotherStyle?: () => void;
+  onImageSelect?: (index: number) => void;
 }
 
 const ImagePreview: React.FC<ImagePreviewProps> = ({
   originalImage,
-  transformedImage,
+  transformedImages,
+  selectedImageIndex,
   isLoading,
   error,
   transformationType,
   onRetake,
   onStartOver,
   onRegenerate,
-  onTryAnotherStyle
+  onTryAnotherStyle,
+  onImageSelect
 }) => {
   const printRef = useRef<HTMLDivElement>(null);
+  
+  // Get the currently selected transformed image
+  const currentTransformedImage = transformedImages.length > 0 ? transformedImages[selectedImageIndex] : null;
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
@@ -245,10 +259,10 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
   });
 
   const handleDownload = async () => {
-    if (transformedImage) {
+    if (currentTransformedImage) {
       try {
         // Convert the image to a blob with proper MIME type
-        const response = await fetch(transformedImage);
+        const response = await fetch(currentTransformedImage);
         const blob = await response.blob();
         
         // Create a new blob with explicit PNG MIME type
@@ -275,7 +289,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
         console.error('Download failed:', error);
         // Fallback to original method
         const link = document.createElement('a');
-        link.href = transformedImage;
+        link.href = currentTransformedImage;
         link.download = `photo-booth-${transformationType.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.png`;
         link.setAttribute('target', '_blank');
         document.body.appendChild(link);
@@ -287,42 +301,106 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
 
   return (
     <PreviewContainer>
-      <ImagesContainer>
-        <ImageCard>
+      {/* Original Image */}
+      <OriginalImageContainer>
+        <ImageCard style={{ maxWidth: '300px' }}>
           <ImageTitle>Original Photo</ImageTitle>
           <ImageWrapper>
             <Image src={originalImage} alt="Original" />
           </ImageWrapper>
         </ImageCard>
+      </OriginalImageContainer>
 
-        <ImageCard>
-          <ImageTitle>{transformationType} Transformation</ImageTitle>
-          <ImageWrapper>
-            {transformedImage && <Image src={transformedImage} alt="Transformed" />}
-            {isLoading && (
-              <LoadingOverlay>
-                <LoadingSpinner size={48} />
-                Creating your transformation...
-              </LoadingOverlay>
-            )}
-            {error && !isLoading && (
-              <LoadingOverlay>
-                <div style={{ textAlign: 'center', color: '#ff4444' }}>
-                  ❌
-                  <div style={{ marginTop: '10px', fontSize: '14px' }}>
-                    Failed to generate transformation
+      {/* Transformed Images */}
+      <div>
+        <ImageTitle style={{ textAlign: 'center', marginBottom: '20px', fontSize: '24px' }}>
+          {transformationType} Transformations - Choose Your Favorite
+        </ImageTitle>
+        
+        <TransformedImagesContainer>
+          {isLoading && transformedImages.length === 0 && (
+            <>
+              {/* Show loading placeholders for both variations */}
+              <ImageCard>
+                <ImageTitle>Variation 1</ImageTitle>
+                <ImageWrapper>
+                  <LoadingOverlay>
+                    <LoadingSpinner size={48} />
+                    Generating variation 1...
+                  </LoadingOverlay>
+                </ImageWrapper>
+              </ImageCard>
+              <ImageCard>
+                <ImageTitle>Variation 2</ImageTitle>
+                <ImageWrapper>
+                  <LoadingOverlay>
+                    <LoadingSpinner size={48} />
+                    Generating variation 2...
+                  </LoadingOverlay>
+                </ImageWrapper>
+              </ImageCard>
+            </>
+          )}
+          
+          {transformedImages.map((imageUrl, index) => (
+            <ImageCard 
+              key={index}
+              style={{ 
+                cursor: 'pointer',
+                border: selectedImageIndex === index ? '3px solid var(--primary)' : '2px solid var(--surface-2)',
+                transform: selectedImageIndex === index ? 'scale(1.02)' : 'scale(1)',
+                transition: 'all 0.3s ease'
+              }}
+              onClick={() => onImageSelect && onImageSelect(index)}
+            >
+              <ImageTitle>
+                Variation {index + 1}
+                {selectedImageIndex === index && ' ✓ Selected'}
+              </ImageTitle>
+              <ImageWrapper>
+                <Image src={imageUrl} alt={`Transformed variation ${index + 1}`} />
+                {selectedImageIndex === index && (
+                  <div style={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                    background: 'var(--primary)',
+                    color: '#000',
+                    borderRadius: '50%',
+                    width: '30px',
+                    height: '30px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 'bold',
+                    fontSize: '18px'
+                  }}>
+                    ✓
                   </div>
-                </div>
-              </LoadingOverlay>
-            )}
-          </ImageWrapper>
-        </ImageCard>
-      </ImagesContainer>
+                )}
+              </ImageWrapper>
+            </ImageCard>
+          ))}
+          
+          {/* Show loading for remaining variations if still generating */}
+          {isLoading && transformedImages.length > 0 && transformedImages.length < 2 && (
+            <ImageCard>
+              <ImageTitle>Variation {transformedImages.length + 1}</ImageTitle>
+              <ImageWrapper>
+                <LoadingOverlay>
+                  <LoadingSpinner size={48} />
+                  Generating variation {transformedImages.length + 1}...
+                </LoadingOverlay>
+              </ImageWrapper>
+            </ImageCard>
+          )}
+        </TransformedImagesContainer>
+      </div>
 
       {error && <ErrorMessage>{error}</ErrorMessage>}
 
       <ControlsContainer>
-        {transformedImage && (
+        {currentTransformedImage && (
           <>
             <ActionButton variant="primary" onClick={handlePrint}>
               <Printer size={20} />
@@ -358,9 +436,9 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
         <PrintableContent ref={printRef}>
           <PrintTitle>AI Photo Booth - {transformationType} Transformation</PrintTitle>
           <PrintImagesContainer>
-            {transformedImage && (
+            {currentTransformedImage && (
               <PrintImageWrapper>
-                <PrintImage src={transformedImage} alt="Transformed" />
+                <PrintImage src={currentTransformedImage} alt="Transformed" />
               </PrintImageWrapper>
             )}
           </PrintImagesContainer>
